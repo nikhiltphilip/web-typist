@@ -1,13 +1,4 @@
-import {
-  faAt,
-  faClock,
-  faFont,
-  faHashtag,
-  faMountain,
-  faQuoteLeft,
-  faScrewdriverWrench,
-  faWrench,
-} from "@fortawesome/free-solid-svg-icons";
+import { AtSignIcon, ClockIcon, HashIcon, MountainIcon, PencilIcon, QuoteIcon, TypeIcon, WrenchIcon, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 import { setSetting, useSettings, type QuoteLength, type Settings } from "@/lib/settings";
 import { Button, cn } from "../ui";
@@ -18,7 +9,7 @@ const btn = "px-(--horizontal-padding) py-(--vertical-padding)";
 const vars =
   "[--card-gap:0.25em] [--font-size:0.5em] [--horizontal-padding:0.4em] [--vertical-padding:0.5rem] md:[--card-gap:1em] md:[--font-size:0.6em] md:[--horizontal-padding:0.45em] md:[--vertical-padding:0.75rem] lg:[--font-size:0.75em] lg:[--horizontal-padding:0.5em] xl:[--card-gap:2em] xl:[--horizontal-padding:1em]";
 
-function TC({ active, onClick, icon, text, disabled }: { active?: boolean; onClick: () => void; icon?: typeof faAt; text?: string; disabled?: boolean }) {
+function TC({ active, onClick, icon, text, disabled }: { active?: boolean; onClick: () => void; icon?: LucideIcon; text?: string; disabled?: boolean }) {
   return <Button variant="text" active={active} onClick={onClick} icon={icon} text={text} disabled={disabled} className={btn} />;
 }
 
@@ -40,7 +31,7 @@ export function TestConfig({ hidden, onChange }: { hidden: boolean; onChange: ()
               <TC key={q} text={q} active={s.quoteLength === q} onClick={() => set("quoteLength", q)} />
             ))
           : s.mode === "custom"
-            ? [<TC key="c" icon={faScrewdriverWrench} text="change" onClick={() => setCustomOpen(true)} />]
+            ? [<TC key="c" icon={PencilIcon} text="change" onClick={() => setCustomOpen(true)} />]
             : null;
 
   return (
@@ -54,16 +45,16 @@ export function TestConfig({ hidden, onChange }: { hidden: boolean; onChange: ()
       >
         <div className={cn("mr-(--card-gap) w-max place-self-end", (s.mode === "zen" || s.mode === "quote" || s.mode === "custom") && "invisible")}>
           <div className={card}>
-            <TC icon={faAt} text="punctuation" active={s.punctuation} onClick={() => set("punctuation", !s.punctuation)} />
-            <TC icon={faHashtag} text="numbers" active={s.numbers} onClick={() => set("numbers", !s.numbers)} />
+            <TC icon={AtSignIcon} text="punctuation" active={s.punctuation} onClick={() => set("punctuation", !s.punctuation)} />
+            <TC icon={HashIcon} text="numbers" active={s.numbers} onClick={() => set("numbers", !s.numbers)} />
           </div>
         </div>
         <div className={card}>
-          <TC icon={faClock} text="time" active={s.mode === "time"} onClick={() => set("mode", "time")} />
-          <TC icon={faFont} text="words" active={s.mode === "words"} onClick={() => set("mode", "words")} />
-          <TC icon={faQuoteLeft} text="quote" active={s.mode === "quote"} onClick={() => set("mode", "quote")} />
-          <TC icon={faMountain} text="zen" active={s.mode === "zen"} onClick={() => set("mode", "zen")} />
-          <TC icon={faWrench} text="custom" active={s.mode === "custom"} onClick={() => set("mode", "custom")} />
+          <TC icon={ClockIcon} text="time" active={s.mode === "time"} onClick={() => set("mode", "time")} />
+          <TC icon={TypeIcon} text="words" active={s.mode === "words"} onClick={() => set("mode", "words")} />
+          <TC icon={QuoteIcon} text="quote" active={s.mode === "quote"} onClick={() => set("mode", "quote")} />
+          <TC icon={MountainIcon} text="zen" active={s.mode === "zen"} onClick={() => set("mode", "zen")} />
+          <TC icon={WrenchIcon} text="custom" active={s.mode === "custom"} onClick={() => set("mode", "custom")} />
         </div>
         <div className={cn("ml-(--card-gap) w-max place-self-start", !mode2 && "invisible")}>
           <div className={card}>{mode2}</div>

@@ -70,6 +70,7 @@ export const DEFAULT_SETTINGS: Settings = {
 export const FONTS = [
   "Roboto Mono",
   "JetBrains Mono",
+  "Iosevka",
   "Fira Code",
   "IBM Plex Mono",
   "Inconsolata",

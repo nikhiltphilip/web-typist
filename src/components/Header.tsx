@@ -1,6 +1,6 @@
 "use client";
 
-import { faChartLine, faCog, faGraduationCap, faInfo, faKeyboard } from "@fortawesome/free-solid-svg-icons";
+import { ChartLineIcon, GraduationCapIcon, InfoIcon, KeyboardIcon, SettingsIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { APP_NAME, APP_TAGLINE } from "@/lib/brand";
@@ -44,11 +44,11 @@ function Logo() {
 export function Header() {
   const pathname = usePathname();
   const items = [
-    { href: "/", icon: faKeyboard, nav: "test", label: "start typing" },
-    { href: "/courses", icon: faGraduationCap, nav: "courses", label: "courses" },
-    { href: "/analytics", icon: faChartLine, nav: "analytics", label: "analytics" },
-    { href: "/about", icon: faInfo, nav: "about", label: "about" },
-    { href: "/settings", icon: faCog, nav: "settings", label: "settings" },
+    { href: "/", icon: KeyboardIcon, nav: "test", label: "start typing" },
+    { href: "/courses", icon: GraduationCapIcon, nav: "courses", label: "courses" },
+    { href: "/analytics", icon: ChartLineIcon, nav: "analytics", label: "analytics" },
+    { href: "/about", icon: InfoIcon, nav: "about", label: "about" },
+    { href: "/settings", icon: SettingsIcon, nav: "settings", label: "settings" },
   ];
   return (
     <header className="flex place-items-center gap-2">

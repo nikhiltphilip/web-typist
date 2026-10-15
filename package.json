@@ -13,13 +13,11 @@
     "export": "STATIC_EXPORT=1 next build"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^7.3.1",
-    "@fortawesome/free-solid-svg-icons": "^7.3.1",
-    "@fortawesome/react-fontawesome": "^3.5.0",
     "chart.js": "^4.5.1",
     "cmdk": "^1.1.1",
     "dexie": "^4.4.6",
     "howler": "^2.2.4",
+    "lucide-react": "^1.57.0",
     "next": "15.5.28",
     "react": "19.1.0",
     "react-dom": "19.1.0"

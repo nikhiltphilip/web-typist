@@ -1,6 +1,6 @@
 "use client";
 
-import { faChartLine } from "@fortawesome/free-solid-svg-icons";
+import { ChartLineIcon } from "lucide-react";
 import Link from "next/link";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { loadResults } from "@/lib/db";
@@ -396,7 +396,7 @@ export function Analytics() {
     <div className="grid content-start gap-14 fade-in">
       <div className="grid gap-3">
         <h1 className="flex items-center gap-2 text-2xl text-sub">
-          <Icon icon={faChartLine} /> analytics
+          <Icon icon={ChartLineIcon} /> analytics
         </h1>
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex rounded-(--roundness) bg-sub-alt px-1 text-sm">

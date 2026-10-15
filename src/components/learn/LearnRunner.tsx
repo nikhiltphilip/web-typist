@@ -1,6 +1,6 @@
 "use client";
 
-import { faBook, faCog, faFont, faHand, faHashtag, faKeyboard, faRotateRight, faSeedling, faWrench } from "@fortawesome/free-solid-svg-icons";
+import { BookIcon, HandIcon, HashIcon, KeyboardIcon, RotateCwIcon, SettingsIcon, SproutIcon, TypeIcon, WrenchIcon, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { loadResults, saveResult } from "@/lib/db";
@@ -46,12 +46,12 @@ function LiveKeyboard({
 
 const DIGITS = "0123456789".split("").map((d, i) => new Letter(d.codePointAt(0)!, i === 0 ? 0 : Math.log10(1 + 1 / i)));
 
-const TYPES: { id: LessonType; label: string; icon: typeof faFont }[] = [
-  { id: "guided", label: "guided", icon: faSeedling },
-  { id: "words", label: "common words", icon: faFont },
-  { id: "books", label: "books", icon: faBook },
-  { id: "custom", label: "custom text", icon: faWrench },
-  { id: "numbers", label: "numbers", icon: faHashtag },
+const TYPES: { id: LessonType; label: string; icon: LucideIcon }[] = [
+  { id: "guided", label: "guided", icon: SproutIcon },
+  { id: "words", label: "common words", icon: TypeIcon },
+  { id: "books", label: "books", icon: BookIcon },
+  { id: "custom", label: "custom text", icon: WrenchIcon },
+  { id: "numbers", label: "numbers", icon: HashIcon },
 ];
 
 // The same card look as the typing test's config bar.
@@ -198,9 +198,9 @@ export function LearnRunner() {
           ))}
         </div>
         <div className={card}>
-          <Button variant="text" icon={faKeyboard} text="keyboard" active={s.showKeyboard} onClick={() => setLearn({ showKeyboard: !s.showKeyboard })} className="px-[0.5em] py-3" />
-          <Button variant="text" icon={faHand} text="hands" active={s.showHands} onClick={() => setLearn({ showHands: !s.showHands })} className="px-[0.5em] py-3" />
-          <LinkButton href="/settings#learn" icon={faCog} text="settings" className="px-[0.5em] py-3" />
+          <Button variant="text" icon={KeyboardIcon} text="keyboard" active={s.showKeyboard} onClick={() => setLearn({ showKeyboard: !s.showKeyboard })} className="px-[0.5em] py-3" />
+          <Button variant="text" icon={HandIcon} text="hands" active={s.showHands} onClick={() => setLearn({ showHands: !s.showHands })} className="px-[0.5em] py-3" />
+          <LinkButton href="/settings#learn" icon={SettingsIcon} text="settings" className="px-[0.5em] py-3" />
         </div>
       </div>
 
@@ -217,14 +217,14 @@ export function LearnRunner() {
         {!windowFocused && <div className="absolute inset-0 grid place-items-center text-base text-text">Click here or press any key to focus</div>}
       </div>
 
-      <Button variant="text" icon={faRotateRight} title="new lesson (tab + enter)" className="hide-on-focus mx-auto w-max px-8 py-2 text-base" onClick={() => newLesson(keys)} />
+      <Button variant="text" icon={RotateCwIcon} title="new lesson (tab + enter)" className="hide-on-focus mx-auto w-max px-8 py-2 text-base" onClick={() => newLesson(keys)} />
 
       {input && <LiveKeyboard input={input} look={keyLook} keyboard={s.showKeyboard} hands={s.showHands} fingers={s.fingerHints} />}
 
       <p className="hide-on-focus text-center text-xs text-sub">
         adaptive learning path based on <a className="underline-offset-4 hover:underline" href="https://github.com/aradzie/keybr.com">keybr.com</a> · see your progress in{" "}
         <Link className="text-main underline-offset-4 hover:underline" href="/analytics">
-          <Icon icon={faSeedling} /> analytics
+          <Icon icon={SproutIcon} /> analytics
         </Link>
       </p>
     </div>

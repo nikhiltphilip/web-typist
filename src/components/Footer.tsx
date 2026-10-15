@@ -1,6 +1,6 @@
 "use client";
 
-import { faCode, faFileContract, faPalette } from "@fortawesome/free-solid-svg-icons";
+import { CodeIcon, FileTextIcon, PaletteIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { openPalette } from "@/lib/focus";
 import { useSettings } from "@/lib/settings";
@@ -35,12 +35,12 @@ export function Footer() {
       <Keytips />
       <div className="hide-on-focus -m-2 flex justify-between gap-8">
         <div className="grid grid-cols-1 justify-items-start xs:grid-cols-2 sm:grid-cols-4 lg:flex">
-          <LinkButton href="https://github.com/monkeytypegame/monkeytype" external icon={faCode} text="monkeytype" />
-          <LinkButton href="https://github.com/alexei-matveev/gtypist" external icon={faCode} text="gnu typist" />
-          <LinkButton href="/about" icon={faFileContract} text="license" />
+          <LinkButton href="https://github.com/monkeytypegame/monkeytype" external icon={CodeIcon} text="monkeytype" />
+          <LinkButton href="https://github.com/alexei-matveev/gtypist" external icon={CodeIcon} text="gnu typist" />
+          <LinkButton href="/about" icon={FileTextIcon} text="license" />
         </div>
         <div className="flex flex-col items-end text-right lg:flex-row">
-          <Button variant="text" icon={faPalette} text={theme.replace(/_/g, " ")} onClick={() => openPalette("themes")} />
+          <Button variant="text" icon={PaletteIcon} text={theme.replace(/_/g, " ")} onClick={() => openPalette("themes")} />
         </div>
       </div>
     </footer>

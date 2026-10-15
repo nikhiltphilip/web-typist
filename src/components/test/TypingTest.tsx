@@ -1,6 +1,6 @@
 "use client";
 
-import { faChevronRight, faRotateRight } from "@fortawesome/free-solid-svg-icons";
+import { ChevronRightIcon, RotateCwIcon } from "lucide-react";
 import { startTransition, useCallback, useEffect, useRef, useState } from "react";
 import { bestFor, saveTest } from "@/lib/db";
 import { WordsTest, type TestResult } from "@/lib/engine/words";
@@ -184,7 +184,7 @@ export function TypingTest() {
         <Button
           ref={restartBtn}
           variant="text"
-          icon={faRotateRight}
+          icon={RotateCwIcon}
           title="restart test"
           className="hide-on-focus mx-auto mt-4 w-max px-8 py-4 text-base"
           onClick={() => restart()}
@@ -215,8 +215,8 @@ export function TypingTest() {
           ]}
           actions={
             <>
-              <Button ref={restartBtn} variant="text" icon={faChevronRight} title="next test" className="px-8 py-4 text-base" onClick={() => restart()} />
-              <Button variant="text" icon={faRotateRight} title="repeat test" className="px-8 py-4 text-base" onClick={() => restart(test)} />
+              <Button ref={restartBtn} variant="text" icon={ChevronRightIcon} title="next test" className="px-8 py-4 text-base" onClick={() => restart()} />
+              <Button variant="text" icon={RotateCwIcon} title="repeat test" className="px-8 py-4 text-base" onClick={() => restart(test)} />
             </>
           }
         />

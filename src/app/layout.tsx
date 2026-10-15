@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
-import { config } from "@fortawesome/fontawesome-svg-core";
-import "@fortawesome/fontawesome-svg-core/styles.css";
 import { AppShell } from "@/components/AppShell";
 import { APP_NAME, STORAGE_KEY } from "@/lib/brand";
 import { DEFAULT_THEME, THEMES } from "@/lib/themes";
 import "./globals.css";
-
-config.autoAddCss = false;
 
 export const metadata: Metadata = {
   title: `${APP_NAME} | a minimal typing test and touch typing courses`,

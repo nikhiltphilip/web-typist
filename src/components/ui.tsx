@@ -1,14 +1,14 @@
 "use client";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import type { AnchorHTMLAttributes, ReactNode, Ref } from "react";
 
 export const cn = (...xs: (string | false | null | undefined)[]) => xs.filter(Boolean).join(" ");
 
-export function Icon({ icon, className }: { icon: IconDefinition; className?: string }) {
-  return <FontAwesomeIcon icon={icon} className={className} />;
+/** A Lucide icon sized to the surrounding text, like an icon font. */
+export function Icon({ icon: Glyph, className }: { icon: LucideIcon; className?: string }) {
+  return <Glyph aria-hidden className={cn("inline-block h-[1em] w-[1em] shrink-0", className)} strokeWidth={2.25} />;
 }
 
 // Monkeytype's Button (components/common/Button.tsx): "text" variant is sub
@@ -27,7 +27,7 @@ export function buttonClass(variant: "text" | "button", active = false, disabled
 
 type Common = {
   variant?: "text" | "button";
-  icon?: IconDefinition;
+  icon?: LucideIcon;
   text?: ReactNode;
   active?: boolean;
   className?: string;

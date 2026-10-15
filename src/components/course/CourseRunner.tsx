@@ -1,6 +1,6 @@
 "use client";
 
-import { faArrowLeft, faCheck, faChevronRight, faRotateRight, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { ArrowLeftIcon, CheckIcon, ChevronRightIcon, LogOutIcon, RotateCwIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
@@ -73,7 +73,7 @@ function Menu({ player, items, title, passed }: { player: CoursePlayer; items: M
               <span className={cn("flex items-center gap-2 text-xs", complete ? "text-main" : "text-sub")}>
                 {total > 0 && (
                   <>
-                    {complete && <Icon icon={faCheck} />}
+                    {complete && <Icon icon={CheckIcon} />}
                     {done}/{total}
                   </>
                 )}
@@ -161,7 +161,7 @@ function DrillFailed({ view, player }: { view: Extract<View, { kind: "drillFaile
             : `You failed this test, so you need to go back to ${view.failLabel}.`}
         </span>
       }
-      actions={<Button variant="text" icon={faRotateRight} text="press enter to continue" className="px-8 py-4" onClick={() => player.continue()} />}
+      actions={<Button variant="text" icon={RotateCwIcon} text="press enter to continue" className="px-8 py-4" onClick={() => player.continue()} />}
     />
   );
 }
@@ -185,15 +185,15 @@ function DrillDone({ view, player, prevBest }: { view: Extract<View, { kind: "dr
     </>
   ) : (
     <>
-      <Button variant="text" icon={faRotateRight} onClick={() => player.resultKey("r")} className="px-6 py-3">
+      <Button variant="text" icon={RotateCwIcon} onClick={() => player.resultKey("r")} className="px-6 py-3">
         repeat <Kbd>r</Kbd>
       </Button>
       {view.allowNext && (
-        <Button variant="text" icon={faChevronRight} onClick={() => player.resultKey("n")} className="px-6 py-3">
+        <Button variant="text" icon={ChevronRightIcon} onClick={() => player.resultKey("n")} className="px-6 py-3">
           next <Kbd>n</Kbd>
         </Button>
       )}
-      <Button variant="text" icon={faRightFromBracket} onClick={() => player.resultKey("e")} className="px-6 py-3">
+      <Button variant="text" icon={LogOutIcon} onClick={() => player.resultKey("e")} className="px-6 py-3">
         exit <Kbd>e</Kbd>
       </Button>
     </>
@@ -322,7 +322,7 @@ export function CourseRunner({ script }: { script: CourseScript }) {
       <div className="hide-on-focus flex flex-wrap items-baseline justify-between gap-4">
         <div className="flex items-baseline gap-3 text-sub">
           <Link href="/courses" className="text-sm text-sub transition-colors hover:text-text">
-            <Icon icon={faArrowLeft} /> courses
+            <Icon icon={ArrowLeftIcon} /> courses
           </Link>
           <span className="text-sm">/</span>
           <span className="text-sm">{script.title}</span>

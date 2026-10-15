@@ -1,19 +1,6 @@
 "use client";
 
-import {
-  faCircleHalfStroke,
-  faFont,
-  faGraduationCap,
-  faHand,
-  faKeyboard,
-  faSeedling,
-  faGaugeHigh,
-  faICursor,
-  faTextHeight,
-  faTrash,
-  faVolumeHigh,
-} from "@fortawesome/free-solid-svg-icons";
-import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { ALargeSmallIcon, ContrastIcon, GaugeIcon, GraduationCapIcon, HandIcon, KeyboardIcon, SproutIcon, TextCursorIcon, Trash2Icon, TypeIcon, Volume2Icon, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { db } from "@/lib/db";
 import type { LearnSettings } from "@/lib/learn/settings";
@@ -24,7 +11,7 @@ import { Button, cn, Icon } from "./ui";
 
 // Monkeytype's settings page: a title + description on the left, the
 // choices as a row of buttons on the right.
-function Setting({ icon, title, description, children, full }: { icon: IconDefinition; title: string; description: ReactNode; children: ReactNode; full?: boolean }) {
+function Setting({ icon, title, description, children, full }: { icon: LucideIcon; title: string; description: ReactNode; children: ReactNode; full?: boolean }) {
   return (
     <div className={cn("grid gap-x-8 gap-y-2", full ? "grid-cols-1" : "md:grid-cols-[2fr_1fr]")}>
       <div className="grid content-start gap-1">
@@ -84,7 +71,7 @@ export function SettingsPage() {
     <div className="grid content-start gap-12 fade-in">
       <section className="grid gap-8">
         <h2 className="text-2xl text-sub">appearance</h2>
-        <Setting icon={faCircleHalfStroke} title="theme" description="Colour theme for the whole site. Hover a theme in the command line (esc → theme) to preview it." full>
+        <Setting icon={ContrastIcon} title="theme" description="Colour theme for the whole site. Hover a theme in the command line (esc → theme) to preview it." full>
           <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] gap-2">
             {THEME_NAMES.map((t) => {
               const th = THEMES[t];
@@ -113,39 +100,39 @@ export function SettingsPage() {
             })}
           </div>
         </Setting>
-        <Setting icon={faFont} title="font family" description="Font used everywhere on the site." full>
+        <Setting icon={TypeIcon} title="font family" description="Font used everywhere on the site." full>
           <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] gap-2">
             {FONTS.map((f) => (
-              <Button key={f} text={f} active={s.font === f} onClick={() => setSetting("font", f)} className="w-full" />
+              <Button key={f} text={<span style={{ fontFamily: `"${f}", monospace` }}>{f}</span>} active={s.font === f} onClick={() => setSetting("font", f)} className="w-full" />
             ))}
           </div>
         </Setting>
-        <Setting icon={faTextHeight} title="font size" description="Size of the words in the typing test (in rem). Course drills cap at 1.5 so 80-column lessons fit.">
+        <Setting icon={ALargeSmallIcon} title="font size" description="Size of the words in the typing test (in rem). Course drills cap at 1.5 so 80-column lessons fit.">
           <Choices k="fontSize" values={[1, 1.5, 2, 2.5, 3]} />
         </Setting>
-        <Setting icon={faICursor} title="caret style" description="Shape of the typing caret.">
+        <Setting icon={TextCursorIcon} title="caret style" description="Shape of the typing caret.">
           <Choices k="caretStyle" values={["off", "default", "block", "outline", "underline"]} label={(v) => (v === "default" ? "|" : v === "block" ? "▮" : v === "outline" ? "▯" : v === "underline" ? "_" : "off")} />
         </Setting>
-        <Setting icon={faICursor} title="smooth caret" description="How quickly the caret glides to the next letter.">
+        <Setting icon={TextCursorIcon} title="smooth caret" description="How quickly the caret glides to the next letter.">
           <Choices k="smoothCaret" values={["off", "slow", "medium", "fast"]} />
         </Setting>
-        <Setting icon={faGaugeHigh} title="live speed" description="Show your current wpm above the text while typing.">
+        <Setting icon={GaugeIcon} title="live speed" description="Show your current wpm above the text while typing.">
           <Choices k="liveSpeed" values={[false, true]} label={(v) => (v ? "show" : "hide")} />
         </Setting>
-        <Setting icon={faGaugeHigh} title="live accuracy" description="Show your current accuracy while typing.">
+        <Setting icon={GaugeIcon} title="live accuracy" description="Show your current accuracy while typing.">
           <Choices k="liveAcc" values={[false, true]} label={(v) => (v ? "show" : "hide")} />
         </Setting>
       </section>
 
       <section className="grid gap-8">
         <h2 className="text-2xl text-sub">sound</h2>
-        <Setting icon={faVolumeHigh} title="play sound on click" description="Key click sound pack.">
+        <Setting icon={Volume2Icon} title="play sound on click" description="Key click sound pack.">
           <Choices k="sound" values={["off", "click1", "click4", "click6"]} />
         </Setting>
-        <Setting icon={faVolumeHigh} title="play sound on error" description="A distinct sound when you hit the wrong key.">
+        <Setting icon={Volume2Icon} title="play sound on error" description="A distinct sound when you hit the wrong key.">
           <Choices k="errorSound" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faVolumeHigh} title="volume" description="Volume of all sounds.">
+        <Setting icon={Volume2Icon} title="volume" description="Volume of all sounds.">
           <Choices k="volume" values={[0.1, 0.25, 0.5, 0.75, 1]} label={(v) => `${Math.round(v * 100)}%`} />
         </Setting>
       </section>
@@ -153,83 +140,83 @@ export function SettingsPage() {
       <section className="grid gap-8">
         <h2 className="text-2xl text-sub">courses</h2>
         <Setting
-          icon={faGraduationCap}
+          icon={GraduationCapIcon}
           title="max error rate"
           description="Default limit for drills and speed tests (gtypist -e). Above it you repeat the exercise. A lesson can set its own limit with E:, which wins."
         >
           <Choices k="maxError" values={[1, 2, 3, 5, 10]} label={(v) => `${v}%`} />
         </Setting>
-        <Setting icon={faGraduationCap} title="word processor mode" description="Space also completes a line, and extra spaces and blank lines are skipped for you (gtypist -w).">
+        <Setting icon={GraduationCapIcon} title="word processor mode" description="Space also completes a line, and extra spaces and blank lines are skipped for you (gtypist -w).">
           <Choices k="wordProcessor" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faGraduationCap} title="forbid skipping" description="Esc can't skip an exercise; you must repeat it or exit (gtypist -k).">
+        <Setting icon={GraduationCapIcon} title="forbid skipping" description="Esc can't skip an exercise; you must repeat it or exit (gtypist -k).">
           <Choices k="noSkip" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faGraduationCap} title="always sure" description="Don't ask for confirmation before leaving a lesson (gtypist -S).">
+        <Setting icon={GraduationCapIcon} title="always sure" description="Don't ask for confirmation before leaving a lesson (gtypist -S).">
           <Choices k="alwaysSure" values={[false, true]} label={onOff} />
         </Setting>
       </section>
 
       <section id="learn" className="grid scroll-mt-8 gap-8">
         <h2 className="text-2xl text-sub">learning path</h2>
-        <Setting icon={faSeedling} title="target speed" description="A key counts as learned once you type it this fast. The next key unlocks when every unlocked key is there.">
+        <Setting icon={SproutIcon} title="target speed" description="A key counts as learned once you type it this fast. The next key unlocks when every unlocked key is there.">
           <LearnChoices k="targetSpeed" values={[100, 150, 175, 200, 250, 300]} label={(v) => `${Math.round(v / 5)} wpm`} />
         </Setting>
-        <Setting icon={faSeedling} title="alphabet size" description="Unlock extra keys straight away instead of starting with six.">
+        <Setting icon={SproutIcon} title="alphabet size" description="Unlock extra keys straight away instead of starting with six.">
           <LearnChoices k="alphabetSize" values={[0, 0.25, 0.5, 0.75, 1]} label={pct} />
         </Setting>
-        <Setting icon={faSeedling} title="recover keys" description="Off: a key stays unlocked once it has reached the target. On: every key must stay above the target before a new one is added.">
+        <Setting icon={SproutIcon} title="recover keys" description="Off: a key stays unlocked once it has reached the target. On: every key must stay above the target before a new one is added.">
           <LearnChoices k="recoverKeys" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faSeedling} title="natural words" description="Use real words when enough of them fit the unlocked letters; otherwise pronounceable pseudo-words.">
+        <Setting icon={SproutIcon} title="natural words" description="Use real words when enough of them fit the unlocked letters; otherwise pronounceable pseudo-words.">
           <LearnChoices k="naturalWords" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faSeedling} title="keyboard order" description="Unlock keys home row first, instead of by how common the letter is.">
+        <Setting icon={SproutIcon} title="keyboard order" description="Unlock keys home row first, instead of by how common the letter is.">
           <LearnChoices k="keyboardOrder" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faSeedling} title="lesson length" description="Characters per lesson, from about 100 to 200.">
+        <Setting icon={SproutIcon} title="lesson length" description="Characters per lesson, from about 100 to 200.">
           <LearnChoices k="length" values={[0, 0.5, 1]} label={(v) => (v === 0 ? "short" : v === 1 ? "long" : "medium")} />
         </Setting>
-        <Setting icon={faSeedling} title="capital letters" description="How often a word starts with a capital.">
+        <Setting icon={SproutIcon} title="capital letters" description="How often a word starts with a capital.">
           <LearnChoices k="capitals" values={[0, 0.1, 0.25, 0.5]} label={pct} />
         </Setting>
-        <Setting icon={faSeedling} title="punctuation" description="How often a word gets punctuation.">
+        <Setting icon={SproutIcon} title="punctuation" description="How often a word gets punctuation.">
           <LearnChoices k="punctuators" values={[0, 0.1, 0.25, 0.5]} label={pct} />
         </Setting>
-        <Setting icon={faSeedling} title="repeat words" description="Type each word this many times in a row.">
+        <Setting icon={SproutIcon} title="repeat words" description="Type each word this many times in a row.">
           <LearnChoices k="repeatWords" values={[1, 2, 3]} />
         </Setting>
-        <Setting icon={faSeedling} title="daily goal" description="Minutes of practice to aim for each day.">
+        <Setting icon={SproutIcon} title="daily goal" description="Minutes of practice to aim for each day.">
           <LearnChoices k="dailyGoal" values={[0, 10, 20, 30, 60]} label={(v) => (v ? `${v} min` : "off")} />
         </Setting>
-        <Setting icon={faSeedling} title="stop on error" description="The cursor waits until you press the right key. Off: wrong letters pile up and must be deleted.">
+        <Setting icon={SproutIcon} title="stop on error" description="The cursor waits until you press the right key. Off: wrong letters pile up and must be deleted.">
           <LearnChoices k="stopOnError" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faSeedling} title="forgive errors" description="Recover automatically when you replace or skip a single character.">
+        <Setting icon={SproutIcon} title="forgive errors" description="Recover automatically when you replace or skip a single character.">
           <LearnChoices k="forgiveErrors" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faSeedling} title="space skips words" description="Pressing space in the middle of a word jumps to the next one (the rest counts as missed).">
+        <Setting icon={SproutIcon} title="space skips words" description="Pressing space in the middle of a word jumps to the next one (the rest counts as missed).">
           <LearnChoices k="spaceSkipsWords" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faKeyboard} title="keyboard" description="Show the on-screen keyboard under the text, with the next key highlighted and each key coloured by your speed.">
+        <Setting icon={KeyboardIcon} title="keyboard" description="Show the on-screen keyboard under the text, with the next key highlighted and each key coloured by your speed.">
           <LearnChoices k="showKeyboard" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faHand} title="hands" description="Show the two hands under the keyboard, lighting up and naming the finger for the next key.">
+        <Setting icon={HandIcon} title="hands" description="Show the two hands under the keyboard, lighting up and naming the finger for the next key.">
           <LearnChoices k="showHands" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faHand} title="finger colours" description="Mark each key on the keyboard with the colour of the finger that should press it.">
+        <Setting icon={HandIcon} title="finger colours" description="Mark each key on the keyboard with the colour of the finger that should press it.">
           <LearnChoices k="fingerHints" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faSeedling} title="common words" description="How many of the most common words to draw from, and whether to skip short ones.">
+        <Setting icon={SproutIcon} title="common words" description="How many of the most common words to draw from, and whether to skip short ones.">
           <div className="grid w-full gap-2">
             <LearnChoices k="wordListSize" values={[100, 250, 500, 1000, 5000]} />
             <LearnChoices k="longWordsOnly" values={[false, true]} label={(v) => (v ? "long words only" : "all words")} />
           </div>
         </Setting>
-        <Setting icon={faSeedling} title="numbers" description="Leading digits follow Benford's law, like real-world numbers.">
+        <Setting icon={SproutIcon} title="numbers" description="Leading digits follow Benford's law, like real-world numbers.">
           <LearnChoices k="benford" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faSeedling} title="custom text" description="Text for the custom text lesson." full>
+        <Setting icon={SproutIcon} title="custom text" description="Text for the custom text lesson." full>
           <textarea
             defaultValue={s.learn.customText}
             onBlur={(e) => setSetting("learn", { ...getSettings().learn, customText: e.target.value })}
@@ -241,7 +228,7 @@ export function SettingsPage() {
 
       <section className="grid gap-8">
         <h2 className="text-2xl text-sub">danger zone</h2>
-        <Setting icon={faTrash} title="reset settings" description="Put every setting back to its default.">
+        <Setting icon={Trash2Icon} title="reset settings" description="Put every setting back to its default.">
           <Button
             text="reset settings"
             className="w-full"
@@ -252,7 +239,7 @@ export function SettingsPage() {
             }}
           />
         </Setting>
-        <Setting icon={faTrash} title="clear history" description="Delete your saved test results and course progress from this browser.">
+        <Setting icon={Trash2Icon} title="clear history" description="Delete your saved test results and course progress from this browser.">
           <Button
             text="clear history"
             className="w-full"
