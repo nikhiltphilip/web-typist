@@ -1,6 +1,6 @@
 "use client";
 
-import { faBook, faCog, faFont, faHashtag, faRotateRight, faSeedling, faWrench } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faCog, faFont, faHand, faHashtag, faKeyboard, faRotateRight, faSeedling, faWrench } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { loadResults, saveResult } from "@/lib/db";
@@ -20,13 +20,26 @@ import { confidenceColor, CurrentKey, Gauges, KeyStrip, keyTitle, Streaks } from
 import { FingerHint, Keyboard, type KeyLook } from "./Keyboard";
 
 /** The keyboard follows the cursor; it re-renders only when the next key changes. */
-function LiveKeyboard({ input, look, fingers }: { input: AdaptiveInput; look: (k: string) => KeyLook | undefined; fingers: boolean }) {
+function LiveKeyboard({
+  input,
+  look,
+  keyboard,
+  hands,
+  fingers,
+}: {
+  input: AdaptiveInput;
+  look: (k: string) => KeyLook | undefined;
+  keyboard: boolean;
+  hands: boolean;
+  fingers: boolean;
+}) {
   const next = useSyncExternalStore(input.subscribe, () => (input.done ? "" : (input.chars[input.pos] ?? "")), () => "");
+  if (!keyboard && !hands) return null;
   return (
     <div className="grid gap-5">
       {/* The hint is what you look at while typing, so only the keyboard fades. */}
-      <Keyboard look={look} active={next || null} fingers={fingers} className="soft-dim-on-focus" />
-      {fingers && <FingerHint active={next || null} />}
+      {keyboard && <Keyboard look={look} active={next || null} fingers={fingers} className="soft-dim-on-focus" />}
+      {hands && <FingerHint active={next || null} />}
     </div>
   );
 }
@@ -102,8 +115,10 @@ export function LearnRunner() {
     [sources],
   );
 
-  // A fresh lesson whenever the lesson settings change (and on first load).
-  const settingsKey = JSON.stringify(s);
+  // A fresh lesson whenever a setting that shapes the lesson changes (and on
+  // first load). Display options (keyboard, hands, colours, goal) don't.
+  const DISPLAY_ONLY = ["showKeyboard", "showHands", "fingerHints", "dailyGoal"];
+  const settingsKey = JSON.stringify(s, (k, v) => (DISPLAY_ONLY.includes(k) ? undefined : v));
   useEffect(() => {
     if (sources && results) newLesson(keysFor(results));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -169,7 +184,8 @@ export function LearnRunner() {
     [keys, s.type, s.targetSpeed],
   );
 
-  const setType = (type: LessonType) => setSetting("learn", { ...getSettings().learn, type });
+  const setLearn = (patch: Partial<typeof s>) => setSetting("learn", { ...getSettings().learn, ...patch });
+  const setType = (type: LessonType) => setLearn({ type });
 
   if (!sources || !results) return <div className="grid place-items-center text-sub">loading…</div>;
 
@@ -182,6 +198,8 @@ export function LearnRunner() {
           ))}
         </div>
         <div className={card}>
+          <Button variant="text" icon={faKeyboard} text="keyboard" active={s.showKeyboard} onClick={() => setLearn({ showKeyboard: !s.showKeyboard })} className="px-[0.5em] py-3" />
+          <Button variant="text" icon={faHand} text="hands" active={s.showHands} onClick={() => setLearn({ showHands: !s.showHands })} className="px-[0.5em] py-3" />
           <LinkButton href="/settings#learn" icon={faCog} text="settings" className="px-[0.5em] py-3" />
         </div>
       </div>
@@ -201,7 +219,7 @@ export function LearnRunner() {
 
       <Button variant="text" icon={faRotateRight} title="new lesson (tab + enter)" className="hide-on-focus mx-auto w-max px-8 py-2 text-base" onClick={() => newLesson(keys)} />
 
-      {s.showKeyboard && input && <LiveKeyboard input={input} look={keyLook} fingers={s.fingerHints} />}
+      {input && <LiveKeyboard input={input} look={keyLook} keyboard={s.showKeyboard} hands={s.showHands} fingers={s.fingerHints} />}
 
       <p className="hide-on-focus text-center text-xs text-sub">
         adaptive learning path based on <a className="underline-offset-4 hover:underline" href="https://github.com/aradzie/keybr.com">keybr.com</a> · see your progress in{" "}

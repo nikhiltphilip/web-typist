@@ -37,8 +37,11 @@ export interface LearnSettings {
   benford: boolean;
   customText: string;
   customRandomize: boolean;
+  /** On-screen keyboard under the text. */
   showKeyboard: boolean;
-  /** Colour keys by finger and show which finger types the next key. */
+  /** Hands diagram naming the finger for the next key. */
+  showHands: boolean;
+  /** Colour strip on each key for the finger that presses it. */
   fingerHints: boolean;
 }
 
@@ -63,5 +66,6 @@ export const DEFAULT_LEARN: LearnSettings = {
   customText: "The quick brown fox jumps over the lazy dog.",
   customRandomize: false,
   showKeyboard: true,
+  showHands: true,
   fingerHints: true,
 };

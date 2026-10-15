@@ -4,6 +4,8 @@ import {
   faCircleHalfStroke,
   faFont,
   faGraduationCap,
+  faHand,
+  faKeyboard,
   faSeedling,
   faGaugeHigh,
   faICursor,
@@ -209,10 +211,13 @@ export function SettingsPage() {
         <Setting icon={faSeedling} title="space skips words" description="Pressing space in the middle of a word jumps to the next one (the rest counts as missed).">
           <LearnChoices k="spaceSkipsWords" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faSeedling} title="keyboard" description="Show the on-screen keyboard with the next key and each key's speed.">
-          <LearnChoices k="showKeyboard" values={[false, true]} label={(v) => (v ? "show" : "hide")} />
+        <Setting icon={faKeyboard} title="keyboard" description="Show the on-screen keyboard under the text, with the next key highlighted and each key coloured by your speed.">
+          <LearnChoices k="showKeyboard" values={[false, true]} label={onOff} />
         </Setting>
-        <Setting icon={faSeedling} title="finger hints" description="Colour each key by the finger that should press it, and show which finger types the next key.">
+        <Setting icon={faHand} title="hands" description="Show the two hands under the keyboard, lighting up and naming the finger for the next key.">
+          <LearnChoices k="showHands" values={[false, true]} label={onOff} />
+        </Setting>
+        <Setting icon={faHand} title="finger colours" description="Mark each key on the keyboard with the colour of the finger that should press it.">
           <LearnChoices k="fingerHints" values={[false, true]} label={onOff} />
         </Setting>
         <Setting icon={faSeedling} title="common words" description="How many of the most common words to draw from, and whether to skip short ones.">
