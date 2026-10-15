@@ -17,12 +17,18 @@ import { loadQuotes, loadWords } from "@/lib/wordgen";
 import { StreamView } from "../typing/StreamView";
 import { Button, cn, Icon, LinkButton } from "../ui";
 import { confidenceColor, CurrentKey, Gauges, KeyStrip, keyTitle, Streaks } from "./Indicators";
-import { Keyboard, type KeyLook } from "./Keyboard";
+import { FingerHint, Keyboard, type KeyLook } from "./Keyboard";
 
 /** The keyboard follows the cursor; it re-renders only when the next key changes. */
-function LiveKeyboard({ input, look }: { input: AdaptiveInput; look: (k: string) => KeyLook | undefined }) {
+function LiveKeyboard({ input, look, fingers }: { input: AdaptiveInput; look: (k: string) => KeyLook | undefined; fingers: boolean }) {
   const next = useSyncExternalStore(input.subscribe, () => (input.done ? "" : (input.chars[input.pos] ?? "")), () => "");
-  return <Keyboard look={look} active={next || null} className="dim-on-focus" />;
+  return (
+    <div className="grid gap-5">
+      {/* The hint is what you look at while typing, so only the keyboard fades. */}
+      <Keyboard look={look} active={next || null} fingers={fingers} className="soft-dim-on-focus" />
+      {fingers && <FingerHint active={next || null} />}
+    </div>
+  );
 }
 
 const DIGITS = "0123456789".split("").map((d, i) => new Letter(d.codePointAt(0)!, i === 0 ? 0 : Math.log10(1 + 1 / i)));
@@ -195,7 +201,7 @@ export function LearnRunner() {
 
       <Button variant="text" icon={faRotateRight} title="new lesson (tab + enter)" className="hide-on-focus mx-auto w-max px-8 py-2 text-base" onClick={() => newLesson(keys)} />
 
-      {s.showKeyboard && input && <LiveKeyboard input={input} look={keyLook} />}
+      {s.showKeyboard && input && <LiveKeyboard input={input} look={keyLook} fingers={s.fingerHints} />}
 
       <p className="hide-on-focus text-center text-xs text-sub">
         adaptive learning path based on <a className="underline-offset-4 hover:underline" href="https://github.com/aradzie/keybr.com">keybr.com</a> · see your progress in{" "}

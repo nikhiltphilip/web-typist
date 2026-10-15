@@ -38,6 +38,8 @@ export interface LearnSettings {
   customText: string;
   customRandomize: boolean;
   showKeyboard: boolean;
+  /** Colour keys by finger and show which finger types the next key. */
+  fingerHints: boolean;
 }
 
 export const DEFAULT_LEARN: LearnSettings = {
@@ -61,4 +63,5 @@ export const DEFAULT_LEARN: LearnSettings = {
   customText: "The quick brown fox jumps over the lazy dog.",
   customRandomize: false,
   showKeyboard: true,
+  fingerHints: true,
 };

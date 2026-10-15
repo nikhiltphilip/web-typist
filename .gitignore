@@ -43,6 +43,7 @@ next-env.d.ts
 # project
 reference/
 .next-prod/
+.next-dev/
 .next-export/
 e2e/out/
 *.log

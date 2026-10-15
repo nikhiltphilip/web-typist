@@ -143,6 +143,12 @@ button {
 [data-focused] .dim-on-focus {
   opacity: 0.35;
 }
+.soft-dim-on-focus {
+  transition: opacity 0.25s;
+}
+[data-focused] .soft-dim-on-focus {
+  opacity: 0.7;
+}
 [data-focused] .focus-sub {
   color: var(--sub-color);
 }

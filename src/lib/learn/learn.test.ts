@@ -163,3 +163,22 @@ describe("results", () => {
     expect(steps[1].typo).toBe(true);
   });
 });
+
+describe("finger hints", () => {
+  it("maps keys to standard touch-typing fingers", async () => {
+    const { fingerFor } = await import("./fingers");
+    expect(fingerFor("f")).toEqual({ hand: "left", finger: "index" });
+    expect(fingerFor("k")).toEqual({ hand: "right", finger: "middle" });
+    expect(fingerFor("a")).toEqual({ hand: "left", finger: "pinky" });
+    expect(fingerFor(";")).toEqual({ hand: "right", finger: "pinky" });
+    expect(fingerFor(" ")).toEqual({ hand: "either", finger: "thumb" });
+  });
+
+  it("uses the opposite pinky for shift", async () => {
+    const { keyFor, shiftFor } = await import("./fingers");
+    expect(keyFor("T")).toEqual({ key: "t", shift: true });
+    expect(shiftFor("t")).toBe("rshift");
+    expect(keyFor("?")).toEqual({ key: "/", shift: true });
+    expect(shiftFor("/")).toBe("lshift");
+  });
+});

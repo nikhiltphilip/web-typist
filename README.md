@@ -6,7 +6,7 @@ results and course progress are kept in IndexedDB.
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
+npm run dev        # http://localhost:3000 (builds into .next-dev)
 npm test           # engine + course player unit tests
 npm run lessons    # recompile lessons/*.typ → public/courses/*.json
 npm run preview    # production build on :3211, alongside `npm run dev`

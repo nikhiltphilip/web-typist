@@ -212,6 +212,9 @@ export function SettingsPage() {
         <Setting icon={faSeedling} title="keyboard" description="Show the on-screen keyboard with the next key and each key's speed.">
           <LearnChoices k="showKeyboard" values={[false, true]} label={(v) => (v ? "show" : "hide")} />
         </Setting>
+        <Setting icon={faSeedling} title="finger hints" description="Colour each key by the finger that should press it, and show which finger types the next key.">
+          <LearnChoices k="fingerHints" values={[false, true]} label={onOff} />
+        </Setting>
         <Setting icon={faSeedling} title="common words" description="How many of the most common words to draw from, and whether to skip short ones.">
           <div className="grid w-full gap-2">
             <LearnChoices k="wordListSize" values={[100, 250, 500, 1000, 5000]} />
