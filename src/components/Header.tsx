@@ -1,6 +1,6 @@
 "use client";
 
-import { faCog, faGraduationCap, faInfo, faKeyboard } from "@fortawesome/free-solid-svg-icons";
+import { faChartLine, faCog, faGraduationCap, faInfo, faKeyboard } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { APP_NAME, APP_TAGLINE } from "@/lib/brand";
@@ -46,6 +46,7 @@ export function Header() {
   const items = [
     { href: "/", icon: faKeyboard, nav: "test", label: "start typing" },
     { href: "/courses", icon: faGraduationCap, nav: "courses", label: "courses" },
+    { href: "/analytics", icon: faChartLine, nav: "analytics", label: "analytics" },
     { href: "/about", icon: faInfo, nav: "about", label: "about" },
     { href: "/settings", icon: faCog, nav: "settings", label: "settings" },
   ];

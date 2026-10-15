@@ -93,6 +93,7 @@ body {
 /* catppuccin colours each nav icon (Monkeytype static/themes/catppuccin.css) */
 [data-theme="catppuccin"] [data-nav-item="test"] { color: #f38ba8; }
 [data-theme="catppuccin"] [data-nav-item="courses"] { color: #fab387; }
+[data-theme="catppuccin"] [data-nav-item="analytics"] { color: #89b4fa; }
 [data-theme="catppuccin"] [data-nav-item="about"] { color: #f9e2af; }
 [data-theme="catppuccin"] [data-nav-item="settings"] { color: #a6e3a1; }
 [data-theme="catppuccin"] [data-nav-item]:hover { filter: brightness(1.25); }
@@ -134,6 +135,13 @@ button {
 }
 [data-focused] .hide-on-focus:focus-visible {
   opacity: 1 !important;
+}
+/* The learning path's indicators stay readable while you type, just quieter. */
+.dim-on-focus {
+  transition: opacity 0.25s;
+}
+[data-focused] .dim-on-focus {
+  opacity: 0.35;
 }
 [data-focused] .focus-sub {
   color: var(--sub-color);

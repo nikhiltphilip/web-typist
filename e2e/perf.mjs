@@ -69,4 +69,15 @@ await probe("course-drill", async (page) => {
   }
 });
 
+await probe("learn", async (page) => {
+  await page.goto(base + "/learn", { waitUntil: "networkidle" });
+  await page.waitForSelector(".words [data-i]");
+  await page.waitForTimeout(500);
+  for (let n = 0; n < 2; n++) {
+    const text = await page.$$eval(".words [data-i]", (ls) => ls.map((l) => l.textContent).join(""));
+    for (const ch of text) await page.keyboard.type(ch === "\u00a0" ? " " : ch, { delay: 40 });
+    await page.waitForTimeout(300);
+  }
+});
+
 await browser.close();

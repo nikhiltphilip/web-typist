@@ -17,6 +17,12 @@ if (which === "words") {
   await page.waitForTimeout(800);
   const words = await page.$$eval(".word", (ws) => ws.map((w) => w.textContent));
   keys = words.slice(0, 30).flatMap((w) => [...w, " "]);
+} else if (which === "learn") {
+  await page.goto(base + "/learn", { waitUntil: "networkidle" });
+  await page.waitForSelector(".words [data-i]");
+  await page.waitForTimeout(500);
+  const chars = await page.$$eval(".words [data-i]", (ls) => ls.map((l) => l.textContent));
+  keys = chars.slice(0, 120).map((c) => (c === "\u00a0" ? " " : c));
 } else {
   await page.goto(base + "/courses/v", { waitUntil: "networkidle" });
   await page.waitForTimeout(800);

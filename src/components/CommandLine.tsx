@@ -55,7 +55,7 @@ export function CommandLine() {
       words: { title: "words", items: choice("words", [10, 25, 50, 100], true) },
       punctuation: { title: "punctuation", items: choice("punctuation", [true, false], true, (v) => (v ? "on" : "off")) },
       numbers: { title: "numbers", items: choice("numbers", [true, false], true, (v) => (v ? "on" : "off")) },
-      language: { title: "language", items: choice("language", ["english", "english_1k", "english_5k"], true, (v) => v.replace("_", " ")) },
+      language: { title: "language", items: choice("language", ["english", "english_1k", "english_5k", "english_10k"], true, (v) => v.replace("_", " ")) },
       font: { title: "font family", items: choice("font", FONTS) },
       fontSize: { title: "font size", items: choice("fontSize", [1, 1.25, 1.5, 2, 2.5, 3, 4]) },
       caretStyle: { title: "caret style", items: choice("caretStyle", ["off", "default", "block", "outline", "underline"]) },

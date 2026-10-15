@@ -4,12 +4,13 @@ import { useSyncExternalStore } from "react";
 import { STORAGE_KEY } from "./brand";
 import { DEFAULT_THEME } from "./themes";
 import type { Mode } from "./engine/words";
+import { DEFAULT_LEARN, type LearnSettings } from "./learn/settings";
 
 export type CaretStyle = "default" | "block" | "outline" | "underline" | "off";
 export type SmoothCaret = "off" | "slow" | "medium" | "fast";
 export type SoundPack = "off" | "click1" | "click4" | "click6";
 export type QuoteLength = "short" | "medium" | "long" | "all";
-export type Language = "english" | "english_1k" | "english_5k";
+export type Language = "english" | "english_1k" | "english_5k" | "english_10k";
 
 export interface Settings {
   theme: string;
@@ -36,6 +37,8 @@ export interface Settings {
   wordProcessor: boolean;
   noSkip: boolean;
   alwaysSure: boolean;
+  // adaptive learning path (keybr)
+  learn: LearnSettings;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -61,6 +64,7 @@ export const DEFAULT_SETTINGS: Settings = {
   wordProcessor: false,
   noSkip: false,
   alwaysSure: false,
+  learn: DEFAULT_LEARN,
 };
 
 export const FONTS = [
@@ -86,7 +90,10 @@ function load(): Settings {
   loaded = true;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) current = { ...DEFAULT_SETTINGS, ...JSON.parse(raw) };
+    if (raw) {
+      const saved = JSON.parse(raw);
+      current = { ...DEFAULT_SETTINGS, ...saved, learn: { ...DEFAULT_LEARN, ...saved.learn } };
+    }
   } catch {
     // storage blocked or corrupt: keep defaults
   }

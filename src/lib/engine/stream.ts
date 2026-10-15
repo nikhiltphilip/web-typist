@@ -115,7 +115,7 @@ export class StreamDrill {
     } else {
       // Typist doubled the previous key: ignore it.
       if (this.errorSync >= 0 && at > 0 && key === this.chars[at - 1]) {
-        this.keys.push({ ms: now - this.startedAt!, correct: true });
+        this.keys.push({ ms: now - this.startedAt!, correct: true, cp: key.codePointAt(0) });
         return null;
       }
       this.marks[at] = "incorrect";
@@ -124,7 +124,8 @@ export class StreamDrill {
       this.errorSync = 1;
       ok = false;
     }
-    this.keys.push({ ms: now - this.startedAt!, correct: ok });
+    // Line breaks count as the space key, like keybr's appendLineBreak.
+    this.keys.push({ ms: now - this.startedAt!, correct: ok, cp: expected === "\n" ? 0x20 : expected.codePointAt(0) });
 
     if (this.wordProcessor) this.autoAdvance(key, at);
 

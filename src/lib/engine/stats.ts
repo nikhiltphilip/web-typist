@@ -72,6 +72,8 @@ export function addCounts(a: CharCounts, b: CharCounts): CharCounts {
 export interface Keystroke {
   ms: number;
   correct: boolean;
+  /** Code point of the character this keystroke was meant to type (for per-key analytics). */
+  cp?: number;
 }
 
 export interface ChartPoint {

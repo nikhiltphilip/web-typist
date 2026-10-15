@@ -1,6 +1,6 @@
 "use client";
 
-import { faGraduationCap } from "@fortawesome/free-solid-svg-icons";
+import { faChartLine, faGraduationCap, faSeedling } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import courses from "@/data/courses.json";
@@ -38,6 +38,28 @@ export function CourseList() {
           you repeat the drill.
         </p>
       </div>
+      <section className="grid gap-4">
+        <h3 className="text-sm text-sub">adaptive · keybr learning path</h3>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Link href="/learn" className="group grid gap-3 rounded-(--roundness) bg-sub-alt p-4 transition-colors duration-125 hover:bg-text">
+            <div className="flex items-center gap-2 text-text group-hover:text-bg">
+              <Icon icon={faSeedling} /> Adaptive learning path
+            </div>
+            <div className="text-xs leading-relaxed text-sub group-hover:text-bg">
+              Starts with six letters and adds the next one once every key you know is above your target speed. Each lesson is
+              generated for your weakest key.
+            </div>
+          </Link>
+          <Link href="/analytics" className="group grid gap-3 rounded-(--roundness) bg-sub-alt p-4 transition-colors duration-125 hover:bg-text">
+            <div className="flex items-center gap-2 text-text group-hover:text-bg">
+              <Icon icon={faChartLine} /> Typing analytics
+            </div>
+            <div className="text-xs leading-relaxed text-sub group-hover:text-bg">
+              Speed and accuracy over time, per-key speed and learning progress, a keyboard heatmap and a practice calendar.
+            </div>
+          </Link>
+        </div>
+      </section>
       {groups.map((g) => (
         <section key={g} className="grid gap-4">
           <h3 className="text-sm text-sub">{g}</h3>

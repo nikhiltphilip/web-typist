@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "lessons": "tsx scripts/convert-lessons.ts",
+    "lessons": "tsx scripts/convert-lessons.ts && tsx scripts/build-model.ts",
     "preview": "NEXT_DIST_DIR=.next-prod next build && NEXT_DIST_DIR=.next-prod next start -p 3211",
     "export": "STATIC_EXPORT=1 NEXT_DIST_DIR=out next build"
   },
@@ -39,5 +39,5 @@
     "typescript": "^5",
     "vitest": "^5.0.4"
   },
-  "license": "GPL-3.0"
+  "license": "GPL-3.0 AND AGPL-3.0"
 }

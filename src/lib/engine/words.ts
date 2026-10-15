@@ -77,8 +77,8 @@ export class WordsTest {
     if (this.startedAt === null) this.startedAt = now;
   }
 
-  private log(now: number, correct: boolean) {
-    this.keys.push({ ms: now - (this.startedAt ?? now), correct });
+  private log(now: number, correct: boolean, ch: string) {
+    this.keys.push({ ms: now - (this.startedAt ?? now), correct, cp: ch.codePointAt(0) });
   }
 
   /** Grow the word list in time mode so the user never runs out. */
@@ -100,7 +100,7 @@ export class WordsTest {
     if (this.mode === "zen") {
       this.inputs[i] = input + ch;
       this.words[i] = this.inputs[i];
-      this.log(now, true);
+      this.log(now, true, ch);
       this.emit();
       return true;
     }
@@ -108,7 +108,8 @@ export class WordsTest {
     if (input.length >= word.length + MAX_EXTRA) return null;
     const correct = word[input.length] === ch;
     this.inputs[i] = input + ch;
-    this.log(now, correct);
+    // Attribute the keystroke to the letter it should have been (or itself, past the word end).
+    this.log(now, correct, word[input.length] ?? ch);
 
     // Last word typed exactly right ends the test without needing a space.
     if (i === this.words.length - 1 && this.mode !== "time" && this.inputs[i] === word) {
@@ -126,7 +127,7 @@ export class WordsTest {
     if (input === "") return null;
     this.begin(now);
     const correct = this.mode === "zen" || input === this.words[i];
-    this.log(now, correct);
+    this.log(now, correct, " ");
 
     if (this.mode === "zen") {
       this.words.push("");

@@ -4,6 +4,7 @@
 // personal bests / completion for courses.
 
 import Dexie, { type EntityTable } from "dexie";
+import type { TypingResult } from "./learn/stats";
 
 export interface TestRecord {
   id?: number;
@@ -30,12 +31,17 @@ export interface DrillBest {
 class TypistDB extends Dexie {
   tests!: EntityTable<TestRecord, "id">;
   drillBests!: EntityTable<DrillBest, "key">;
+  /** keybr-style per-key results from every part of the app (analytics + learning path). */
+  results!: EntityTable<TypingResult, "id">;
 
   constructor() {
     super("monkey-typist");
     this.version(1).stores({
       tests: "++id, at, mode",
       drillBests: "key, courseId",
+    });
+    this.version(2).stores({
+      results: "++id, at, source",
     });
   }
 }
@@ -94,5 +100,23 @@ export async function progressByCourse(): Promise<Map<string, number>> {
     return out;
   } catch {
     return new Map();
+  }
+}
+
+export async function saveResult(r: TypingResult): Promise<void> {
+  try {
+    await db().results.add(r);
+  } catch {
+    // storage blocked: the lesson still works, it just isn't remembered
+  }
+}
+
+/** All results, oldest first, optionally for one source. */
+export async function loadResults(source?: TypingResult["source"]): Promise<TypingResult[]> {
+  try {
+    const rows = source ? await db().results.where("source").equals(source).toArray() : await db().results.toArray();
+    return rows.sort((a, b) => a.at - b.at);
+  } catch {
+    return [];
   }
 }

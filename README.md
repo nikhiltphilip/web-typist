@@ -1,7 +1,7 @@
 # monkey-typist
 
-A typing website with Monkeytype's look and feel and GNU Typist's touch typing
-courses. Next.js 15, React 19, Tailwind v4. Everything runs in the browser;
+A typing website with Monkeytype's look and feel, GNU Typist's touch typing
+courses, and keybr.com's adaptive learning path and typing analytics. Next.js 15, React 19, Tailwind v4. Everything runs in the browser;
 results and course progress are kept in IndexedDB.
 
 ```bash
@@ -52,6 +52,9 @@ What keeps typing fast:
 | `src/lib/engine/stats.ts` | wpm / raw / accuracy / consistency, ported from Monkeytype |
 | `src/lib/course/player.ts` | Runs a compiled gtypist script: labels, gotos, E:/F: error limits, R/N/E prompt, menus, Y/N queries |
 | `scripts/convert-lessons.ts` | `.typ` → JSON compiler (rebuilds the missing menu in `kthu.typ`) |
+| `src/lib/learn/` | keybr port: phonetic word model, guided lesson (key unlocking, focus key, learning rate), keybr text input, per-key results and stats |
+| `scripts/build-model.ts` | Builds `public/learn/model-en.json` (order-4 letter chain) from `english_10k.json` |
+| `src/components/learn/`, `src/components/analytics/` | `/learn` practice screen and `/analytics` |
 | `src/components/typing/` | Words, course text, smooth caret, result screen and chart |
 | `src/lib/themes.ts` | Theme palettes (catppuccin is the default) |
 | `e2e/` | Playwright screenshot scripts (`node e2e/course-flow.mjs`), pointed at the system Brave |
@@ -60,7 +63,17 @@ The product name lives in `src/lib/brand.ts`.
 
 ## License
 
-GPL-3.0. Theme palettes, word lists, quotes, fonts, sounds and stat formulas
-come from [Monkeytype](https://github.com/monkeytypegame/monkeytype); the
-lesson scripts in `lessons/` come from
-[GNU Typist](https://github.com/alexei-matveev/gtypist). Both are GPL-3.0.
+GPL-3.0 (`LICENSE`), plus AGPL-3.0 (`LICENSES/AGPL-3.0.txt`) for the keybr
+port. Theme palettes, word lists, quotes, fonts, sounds and stat formulas come
+from [Monkeytype](https://github.com/monkeytypegame/monkeytype) and the lesson
+scripts in `lessons/` from [GNU Typist](https://github.com/alexei-matveev/gtypist),
+both GPL-3.0. The learning path and analytics in `src/lib/learn/`,
+`src/components/learn/` and `src/components/analytics/` are ported from
+[keybr.com](https://github.com/aradzie/keybr.com) (AGPL-3.0), as is
+`src/lib/learn/blacklist-en.json`; the phonetic model data is our own.
+
+AGPL-3.0 means anyone using the site over a network must be able to get its
+source code, so publish the repository and link to it from the site.
+
+No telemetry: keybr's analytics, ads, accounts, multiplayer and server-side
+result storage were not ported. Results stay in the browser's IndexedDB.

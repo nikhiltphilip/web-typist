@@ -29,11 +29,20 @@ for (const [, ch] of todo) {
   else await page.keyboard.press(key);
   n++;
   if (n === 30) await page.screenshot({ path: "e2e/out/c-drill-mid.png" });
-  await page.waitForTimeout(25);
+  await page.waitForTimeout(Number(process.env.DELAY ?? 25));
 }
 await page.waitForTimeout(500);
 await page.mouse.move(5, 5);
 await page.waitForTimeout(200);
 await page.screenshot({ path: "e2e/out/c-result.png" });
+const stored = await page.evaluate(() => new Promise((res) => {
+  const r = indexedDB.open("monkey-typist");
+  r.onsuccess = () => {
+    if (!r.result.objectStoreNames.contains("results")) return res("none");
+    const q = r.result.transaction("results").objectStore("results").getAll();
+    q.onsuccess = () => res(q.result.map((x) => `${x.source}:${x.kind}:${x.histogram.length}keys`).join(","));
+  };
+}));
+console.log("stored results:", stored);
 if (errors.length) console.log("ERRORS:\n" + errors.join("\n"));
 await browser.close();

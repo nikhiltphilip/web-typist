@@ -11,9 +11,10 @@ export default function About() {
         <h2 className={h2}>about</h2>
         <p className={p}>
           A minimal typing test with the look and feel of{" "}
-          <a className={a} href="https://github.com/monkeytypegame/monkeytype">Monkeytype</a>, plus the complete touch typing courses
-          from <a className={a} href="https://github.com/alexei-matveev/gtypist">GNU Typist</a>. Everything runs in your browser.
-          Results and course progress are stored only on this device.
+          <a className={a} href="https://github.com/monkeytypegame/monkeytype">Monkeytype</a>, the complete touch typing courses
+          from <a className={a} href="https://github.com/alexei-matveev/gtypist">GNU Typist</a>, and the adaptive learning path and
+          typing analytics of <a className={a} href="https://github.com/aradzie/keybr.com">keybr.com</a>. Everything runs in your
+          browser. Results and progress are stored only on this device; there is no tracking or telemetry.
         </p>
       </section>
       <section className="grid gap-4">
@@ -28,12 +29,24 @@ export default function About() {
         </p>
       </section>
       <section className="grid gap-4">
+        <h2 className={h2}>how the learning path works</h2>
+        <p className={p}>
+          The <Link className={a} href="/learn">learning path</Link> starts with the six most common letters. Every lesson measures how
+          fast you type each key; once every unlocked key is above your target speed (35 wpm by default), the next letter is added.
+          Each lesson is built around your weakest key, using real words when enough fit the letters you know and pronounceable
+          made-up words otherwise. The cursor waits for the right key. See how you are doing in{" "}
+          <Link className={a} href="/analytics">analytics</Link>.
+        </p>
+      </section>
+      <section className="grid gap-4">
         <h2 className={h2}>license</h2>
         <p className={p}>
           This project is free software under the GNU General Public License v3.0. It includes material from two GPL-3.0 projects:
           the theme palettes, word lists, quotes, fonts, sounds and stat formulas come from Monkeytype, and the lesson scripts in{" "}
           <code>lessons/</code> come from GNU Typist (Copyright © 1998–2003 Simon Baldwin, © 2003–2012 GNU Typist Development Team).
-          The full license text is in the <code>LICENSE</code> file.
+          The adaptive learning path and analytics are ported from keybr.com (by Aliaksandr Radzivanovich and contributors),
+          licensed under the GNU Affero General Public License v3.0. The license texts are in <code>LICENSE</code> and{" "}
+          <code>LICENSES/AGPL-3.0.txt</code>.
         </p>
       </section>
     </div>

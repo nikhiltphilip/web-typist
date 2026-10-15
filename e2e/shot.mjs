@@ -3,7 +3,7 @@
 import { chromium } from "playwright";
 
 const [, , path = "/", out = "e2e/out/shot.png", ...keys] = process.argv;
-const base = process.env.BASE_URL ?? "http://localhost:3210";
+const base = process.env.BASE_URL ?? "http://localhost:3001";
 
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM ?? "/etc/profiles/per-user/null/bin/brave",

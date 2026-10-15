@@ -4,6 +4,7 @@ import {
   faCircleHalfStroke,
   faFont,
   faGraduationCap,
+  faSeedling,
   faGaugeHigh,
   faICursor,
   faTextHeight,
@@ -13,7 +14,8 @@ import {
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import type { ReactNode } from "react";
 import { db } from "@/lib/db";
-import { DEFAULT_SETTINGS, FONTS, setSetting, useSettings, type Settings } from "@/lib/settings";
+import type { LearnSettings } from "@/lib/learn/settings";
+import { DEFAULT_SETTINGS, FONTS, getSettings, setSetting, useSettings, type Settings } from "@/lib/settings";
 import { playClick } from "@/lib/sound";
 import { applyTheme, THEME_NAMES, THEMES } from "@/lib/themes";
 import { Button, cn, Icon } from "./ui";
@@ -54,6 +56,25 @@ function Choices<K extends keyof Settings>({ k, values, label }: { k: K; values:
 }
 
 const onOff = (v: boolean) => (v ? "on" : "off");
+
+/** Same as Choices, for the learning path's nested settings. */
+function LearnChoices<K extends keyof LearnSettings>({ k, values, label }: { k: K; values: LearnSettings[K][]; label?: (v: LearnSettings[K]) => string }) {
+  const { learn } = useSettings();
+  return (
+    <div className="grid w-full auto-cols-fr grid-flow-col gap-2">
+      {values.map((v) => (
+        <Button
+          key={String(v)}
+          active={learn[k] === v}
+          text={label ? label(v) : String(v)}
+          onClick={() => setSetting("learn", { ...getSettings().learn, [k]: v })}
+        />
+      ))}
+    </div>
+  );
+}
+
+const pct = (v: number) => `${Math.round(v * 100)}%`;
 
 export function SettingsPage() {
   const s = useSettings();
@@ -147,6 +168,69 @@ export function SettingsPage() {
         </Setting>
       </section>
 
+      <section id="learn" className="grid scroll-mt-8 gap-8">
+        <h2 className="text-2xl text-sub">learning path</h2>
+        <Setting icon={faSeedling} title="target speed" description="A key counts as learned once you type it this fast. The next key unlocks when every unlocked key is there.">
+          <LearnChoices k="targetSpeed" values={[100, 150, 175, 200, 250, 300]} label={(v) => `${Math.round(v / 5)} wpm`} />
+        </Setting>
+        <Setting icon={faSeedling} title="alphabet size" description="Unlock extra keys straight away instead of starting with six.">
+          <LearnChoices k="alphabetSize" values={[0, 0.25, 0.5, 0.75, 1]} label={pct} />
+        </Setting>
+        <Setting icon={faSeedling} title="recover keys" description="Off: a key stays unlocked once it has reached the target. On: every key must stay above the target before a new one is added.">
+          <LearnChoices k="recoverKeys" values={[false, true]} label={onOff} />
+        </Setting>
+        <Setting icon={faSeedling} title="natural words" description="Use real words when enough of them fit the unlocked letters; otherwise pronounceable pseudo-words.">
+          <LearnChoices k="naturalWords" values={[false, true]} label={onOff} />
+        </Setting>
+        <Setting icon={faSeedling} title="keyboard order" description="Unlock keys home row first, instead of by how common the letter is.">
+          <LearnChoices k="keyboardOrder" values={[false, true]} label={onOff} />
+        </Setting>
+        <Setting icon={faSeedling} title="lesson length" description="Characters per lesson, from about 100 to 200.">
+          <LearnChoices k="length" values={[0, 0.5, 1]} label={(v) => (v === 0 ? "short" : v === 1 ? "long" : "medium")} />
+        </Setting>
+        <Setting icon={faSeedling} title="capital letters" description="How often a word starts with a capital.">
+          <LearnChoices k="capitals" values={[0, 0.1, 0.25, 0.5]} label={pct} />
+        </Setting>
+        <Setting icon={faSeedling} title="punctuation" description="How often a word gets punctuation.">
+          <LearnChoices k="punctuators" values={[0, 0.1, 0.25, 0.5]} label={pct} />
+        </Setting>
+        <Setting icon={faSeedling} title="repeat words" description="Type each word this many times in a row.">
+          <LearnChoices k="repeatWords" values={[1, 2, 3]} />
+        </Setting>
+        <Setting icon={faSeedling} title="daily goal" description="Minutes of practice to aim for each day.">
+          <LearnChoices k="dailyGoal" values={[0, 10, 20, 30, 60]} label={(v) => (v ? `${v} min` : "off")} />
+        </Setting>
+        <Setting icon={faSeedling} title="stop on error" description="The cursor waits until you press the right key. Off: wrong letters pile up and must be deleted.">
+          <LearnChoices k="stopOnError" values={[false, true]} label={onOff} />
+        </Setting>
+        <Setting icon={faSeedling} title="forgive errors" description="Recover automatically when you replace or skip a single character.">
+          <LearnChoices k="forgiveErrors" values={[false, true]} label={onOff} />
+        </Setting>
+        <Setting icon={faSeedling} title="space skips words" description="Pressing space in the middle of a word jumps to the next one (the rest counts as missed).">
+          <LearnChoices k="spaceSkipsWords" values={[false, true]} label={onOff} />
+        </Setting>
+        <Setting icon={faSeedling} title="keyboard" description="Show the on-screen keyboard with the next key and each key's speed.">
+          <LearnChoices k="showKeyboard" values={[false, true]} label={(v) => (v ? "show" : "hide")} />
+        </Setting>
+        <Setting icon={faSeedling} title="common words" description="How many of the most common words to draw from, and whether to skip short ones.">
+          <div className="grid w-full gap-2">
+            <LearnChoices k="wordListSize" values={[100, 250, 500, 1000, 5000]} />
+            <LearnChoices k="longWordsOnly" values={[false, true]} label={(v) => (v ? "long words only" : "all words")} />
+          </div>
+        </Setting>
+        <Setting icon={faSeedling} title="numbers" description="Leading digits follow Benford's law, like real-world numbers.">
+          <LearnChoices k="benford" values={[false, true]} label={onOff} />
+        </Setting>
+        <Setting icon={faSeedling} title="custom text" description="Text for the custom text lesson." full>
+          <textarea
+            defaultValue={s.learn.customText}
+            onBlur={(e) => setSetting("learn", { ...getSettings().learn, customText: e.target.value })}
+            className="h-28 w-full resize-y rounded-(--roundness) border-0 bg-sub-alt p-3 text-sm text-text caret-caret outline-none"
+          />
+          <LearnChoices k="customRandomize" values={[false, true]} label={(v) => (v ? "random order" : "in order")} />
+        </Setting>
+      </section>
+
       <section className="grid gap-8">
         <h2 className="text-2xl text-sub">danger zone</h2>
         <Setting icon={faTrash} title="reset settings" description="Put every setting back to its default.">
@@ -168,6 +252,7 @@ export function SettingsPage() {
               if (!confirm("Delete all results and course progress?")) return;
               await db().tests.clear();
               await db().drillBests.clear();
+              await db().results.clear();
             }}
           />
         </Setting>

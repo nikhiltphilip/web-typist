@@ -8,6 +8,7 @@ import { setFocused } from "@/lib/focus";
 import { getSettings, useSettings, type Settings } from "@/lib/settings";
 import { playKey } from "@/lib/sound";
 import { useKeys, useWindowFocus } from "@/lib/useKeys";
+import { recordKeystrokes } from "@/lib/learn/record";
 import { useLiveText } from "@/lib/useLiveText";
 import { generateWords, loadQuotes, loadWords, pickQuote, splitText, type Quote } from "@/lib/wordgen";
 import { restartEvent } from "../Header";
@@ -115,6 +116,7 @@ export function TypingTest() {
       const m2 = mode2(s, quote);
       // Monkeytype's minimum for a valid result: some typing, a few seconds.
       if (r.durationMs < 2000 || r.keystrokes < 5) return;
+      recordKeystrokes("test", s.mode, t.keys, r.durationMs);
       const prev = await bestFor(s.mode, m2);
       setPb({ isPb: prev === null || r.wpm > prev, prev });
       saveTest({ at: Date.now(), mode: s.mode, mode2: m2, wpm: r.wpm, raw: r.raw, acc: r.acc, consistency: r.consistency, durationMs: r.durationMs });

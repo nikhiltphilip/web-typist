@@ -12,6 +12,7 @@ import { setFocused } from "@/lib/focus";
 import { getSettings, useSettings } from "@/lib/settings";
 import { playKey } from "@/lib/sound";
 import { useKeys, useWindowFocus } from "@/lib/useKeys";
+import { recordKeystrokes } from "@/lib/learn/record";
 import { afterPaint, useLiveText } from "@/lib/useLiveText";
 import { Result } from "../typing/Result";
 import { StreamView } from "../typing/StreamView";
@@ -301,6 +302,7 @@ export function CourseRunner({ script }: { script: CourseScript }) {
       if (key !== "Backspace") playKey(ok);
       if (view.drill.done) {
         setFocused(false);
+        recordKeystrokes("course", script.id, view.drill.keys, view.drill.elapsedMs());
         // Show the result after the last keystroke has painted, so finishing
         // a drill never freezes the final letter.
         afterPaint(() => player.drillFinished());
