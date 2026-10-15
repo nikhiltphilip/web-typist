@@ -1,0 +1,89 @@
+"use client";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import Link from "next/link";
+import type { AnchorHTMLAttributes, ReactNode, Ref } from "react";
+
+export const cn = (...xs: (string | false | null | undefined)[]) => xs.filter(Boolean).join(" ");
+
+export function Icon({ icon, className }: { icon: IconDefinition; className?: string }) {
+  return <FontAwesomeIcon icon={icon} className={className} />;
+}
+
+// Monkeytype's Button (components/common/Button.tsx): "text" variant is sub
+// coloured and turns text-coloured on hover; "button" has a sub-alt fill.
+const base =
+  "inline-flex h-min cursor-pointer select-none appearance-none items-center justify-center gap-[0.5em] rounded border-0 p-[0.5em] text-center leading-[1.25] transition-[color,background,opacity] duration-125 ease-in-out";
+
+export function buttonClass(variant: "text" | "button", active = false, disabled = false) {
+  return cn(
+    base,
+    variant === "text" && (active ? "bg-transparent text-main hover:text-text" : "bg-transparent text-sub hover:text-text active:text-sub"),
+    variant === "button" && (active ? "bg-main text-bg hover:bg-text hover:text-bg" : "bg-sub-alt text-text hover:bg-text hover:text-bg active:bg-sub"),
+    disabled && "pointer-events-none opacity-[0.33]",
+  );
+}
+
+type Common = {
+  variant?: "text" | "button";
+  icon?: IconDefinition;
+  text?: ReactNode;
+  active?: boolean;
+  className?: string;
+  title?: string;
+  children?: ReactNode;
+};
+
+export function Button({
+  variant = "button",
+  icon,
+  text,
+  active,
+  disabled,
+  className,
+  children,
+  ...rest
+}: Common & { onClick?: () => void; disabled?: boolean; tabIndex?: number; id?: string; "data-nav-item"?: string; ref?: Ref<HTMLButtonElement> }) {
+  return (
+    <button type="button" className={cn(buttonClass(variant, active, disabled), className)} disabled={disabled} {...rest}>
+      {icon && <Icon icon={icon} />}
+      {text}
+      {children}
+    </button>
+  );
+}
+
+export function LinkButton({
+  href,
+  variant = "text",
+  icon,
+  text,
+  active,
+  className,
+  children,
+  external,
+  ...rest
+}: Common & { href: string; external?: boolean; "data-nav-item"?: string } & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href">) {
+  const cls = cn(buttonClass(variant, active), className);
+  const content = (
+    <>
+      {icon && <Icon icon={icon} />}
+      {text}
+      {children}
+    </>
+  );
+  return external ? (
+    <a href={href} className={cls} target="_blank" rel="noreferrer" {...rest}>
+      {content}
+    </a>
+  ) : (
+    <Link href={href} className={cls} {...rest}>
+      {content}
+    </Link>
+  );
+}
+
+export function Kbd({ children }: { children: ReactNode }) {
+  return <kbd>{children}</kbd>;
+}

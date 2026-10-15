@@ -1,0 +1,370 @@
+[
+  {
+    "id": "q",
+    "title": "Quick QWERTY course",
+    "group": "english · qwerty",
+    "description": "learn the whole keyboard in 5 lessons",
+    "drills": 49,
+    "scored": 49
+  },
+  {
+    "id": "r",
+    "title": "Long QWERTY course",
+    "group": "english · qwerty",
+    "description": "the same keys, slower and deeper, 14 lessons",
+    "drills": 140,
+    "scored": 140
+  },
+  {
+    "id": "t",
+    "title": "QWERTY touch typing",
+    "group": "english · qwerty",
+    "description": "16 lessons of touch typing fundamentals",
+    "drills": 222,
+    "scored": 222
+  },
+  {
+    "id": "v",
+    "title": "Yet more QWERTY lessons",
+    "group": "english · qwerty",
+    "description": "19 lessons of extra practice",
+    "drills": 140,
+    "scored": 140
+  },
+  {
+    "id": "u",
+    "title": "QWERTY review",
+    "group": "english · qwerty",
+    "description": "13 review lessons",
+    "drills": 56,
+    "scored": 56
+  },
+  {
+    "id": "s",
+    "title": "Speed drills",
+    "group": "english · drills",
+    "description": "build speed once you know the keys",
+    "drills": 35,
+    "scored": 35
+  },
+  {
+    "id": "m",
+    "title": "Typing drills",
+    "group": "english · drills",
+    "description": "11 lessons of mixed drills",
+    "drills": 63,
+    "scored": 63
+  },
+  {
+    "id": "n",
+    "title": "Calculator keypad",
+    "group": "english · drills",
+    "description": "number pad lessons",
+    "drills": 41,
+    "scored": 41
+  },
+  {
+    "id": "d",
+    "title": "Dvorak touch typing",
+    "group": "english · layouts",
+    "description": "14 lessons for the Dvorak layout",
+    "drills": 104,
+    "scored": 104
+  },
+  {
+    "id": "c",
+    "title": "Colemak touch typing",
+    "group": "english · layouts",
+    "description": "17 lessons for the Colemak layout",
+    "drills": 83,
+    "scored": 83
+  },
+  {
+    "id": "demo",
+    "title": "Command demonstration",
+    "group": "other",
+    "description": "every gtypist command, explained",
+    "drills": 8,
+    "scored": 6
+  },
+  {
+    "id": "esp",
+    "title": "Menú principal",
+    "group": "other languages",
+    "description": "75 exercises",
+    "drills": 75,
+    "scored": 20
+  },
+  {
+    "id": "cs",
+    "title": "Série Q obsahuje těchto 5 lekcí",
+    "group": "other languages",
+    "description": "806 exercises",
+    "drills": 806,
+    "scored": 806
+  },
+  {
+    "id": "ttde",
+    "title": "tipptrainer 0.6.0 lessons",
+    "group": "other languages",
+    "description": "276 exercises",
+    "drills": 276,
+    "scored": 276
+  },
+  {
+    "id": "tinydemo",
+    "title": "Typing tutor demonstration",
+    "group": "other languages",
+    "description": "2 exercises",
+    "drills": 2,
+    "scored": 2
+  },
+  {
+    "id": "ru",
+    "title": "Выбирайте:",
+    "group": "other languages",
+    "description": "110 exercises",
+    "drills": 110,
+    "scored": 110
+  },
+  {
+    "id": "ktbg_long",
+    "title": "Bulgarian (auto-generated-long)",
+    "group": "other languages · ktouch",
+    "description": "120 exercises",
+    "drills": 120,
+    "scored": 120
+  },
+  {
+    "id": "ktbg",
+    "title": "Bulgarian (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "48 exercises",
+    "drills": 48,
+    "scored": 48
+  },
+  {
+    "id": "ktes_cat",
+    "title": "Catalan (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "45 exercises",
+    "drills": 45,
+    "scored": 45
+  },
+  {
+    "id": "ktdk2",
+    "title": "Danish (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "32 exercises",
+    "drills": 32,
+    "scored": 32
+  },
+  {
+    "id": "ktdk",
+    "title": "Danish (complete course)",
+    "group": "other languages · ktouch",
+    "description": "269 exercises",
+    "drills": 269,
+    "scored": 269
+  },
+  {
+    "id": "ktde",
+    "title": "Deutsch (Kurs in 9 Teilen)",
+    "group": "other languages · ktouch",
+    "description": "73 exercises",
+    "drills": 73,
+    "scored": 73
+  },
+  {
+    "id": "ktde_neo",
+    "title": "Deutsch (NEO-Schnellschreiblayout)",
+    "group": "other languages · ktouch",
+    "description": "185 exercises",
+    "drills": 185,
+    "scored": 185
+  },
+  {
+    "id": "ktde_number",
+    "title": "Deutsch (Ziffernblock)",
+    "group": "other languages · ktouch",
+    "description": "65 exercises",
+    "drills": 65,
+    "scored": 65
+  },
+  {
+    "id": "ktdvorak_abcd",
+    "title": "Dvorak - ABCD",
+    "group": "other languages · ktouch",
+    "description": "104 exercises",
+    "drills": 104,
+    "scored": 104
+  },
+  {
+    "id": "ktdvorak",
+    "title": "Dvorak (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "144 exercises",
+    "drills": 144,
+    "scored": 144
+  },
+  {
+    "id": "ktdvorak_es",
+    "title": "Dvorak Español",
+    "group": "other languages · ktouch",
+    "description": "96 exercises",
+    "drills": 96,
+    "scored": 96
+  },
+  {
+    "id": "kten",
+    "title": "English (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "120 exercises",
+    "drills": 120,
+    "scored": 120
+  },
+  {
+    "id": "ktfi",
+    "title": "Finnish (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "118 exercises",
+    "drills": 118,
+    "scored": 118
+  },
+  {
+    "id": "ktfi_kids",
+    "title": "Finnish For Kids",
+    "group": "other languages · ktouch",
+    "description": "118 exercises",
+    "drills": 118,
+    "scored": 118
+  },
+  {
+    "id": "ktfr",
+    "title": "French (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "224 exercises",
+    "drills": 224,
+    "scored": 224
+  },
+  {
+    "id": "ktfr2",
+    "title": "French (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "112 exercises",
+    "drills": 112,
+    "scored": 112
+  },
+  {
+    "id": "ktde2",
+    "title": "German (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "187 exercises",
+    "drills": 187,
+    "scored": 187
+  },
+  {
+    "id": "kthu_expert",
+    "title": "Hungarian (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "224 exercises",
+    "drills": 224,
+    "scored": 224
+  },
+  {
+    "id": "ktit",
+    "title": "Italien (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "120 exercises",
+    "drills": 120,
+    "scored": 120
+  },
+  {
+    "id": "kthu",
+    "title": "kthu lessons",
+    "group": "other languages · ktouch",
+    "description": "100 exercises",
+    "drills": 100,
+    "scored": 100
+  },
+  {
+    "id": "ktnl",
+    "title": "Nederlands (auto-genereerd)",
+    "group": "other languages · ktouch",
+    "description": "96 exercises",
+    "drills": 96,
+    "scored": 96
+  },
+  {
+    "id": "ktnl_junior",
+    "title": "Nederlands Junior (nederlands voor kinderen)",
+    "group": "other languages · ktouch",
+    "description": "49 exercises",
+    "drills": 49,
+    "scored": 49
+  },
+  {
+    "id": "ktno",
+    "title": "Norwegian (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "248 exercises",
+    "drills": 248,
+    "scored": 248
+  },
+  {
+    "id": "ktpl",
+    "title": "Polish (import z TTCoach)",
+    "group": "other languages · ktouch",
+    "description": "61 exercises",
+    "drills": 61,
+    "scored": 61
+  },
+  {
+    "id": "ktru_long",
+    "title": "Russian (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "128 exercises",
+    "drills": 128,
+    "scored": 128
+  },
+  {
+    "id": "ktru_slava",
+    "title": "Russian (full course, hand made)",
+    "group": "other languages · ktouch",
+    "description": "604 exercises",
+    "drills": 604,
+    "scored": 604
+  },
+  {
+    "id": "ktsi",
+    "title": "Slovenian",
+    "group": "other languages · ktouch",
+    "description": "157 exercises",
+    "drills": 157,
+    "scored": 157
+  },
+  {
+    "id": "ktes",
+    "title": "Spanish (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "75 exercises",
+    "drills": 75,
+    "scored": 75
+  },
+  {
+    "id": "kttr",
+    "title": "Turkish (auto-generated)",
+    "group": "other languages · ktouch",
+    "description": "75 exercises",
+    "drills": 75,
+    "scored": 75
+  },
+  {
+    "id": "ktru",
+    "title": "Русский (упрощенная)(autogen-edit)",
+    "group": "other languages · ktouch",
+    "description": "45 exercises",
+    "drills": 45,
+    "scored": 45
+  }
+]
