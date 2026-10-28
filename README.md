@@ -1,4 +1,4 @@
-# monkey-typist
+# web-typist
 
 A typing website with Monkeytype's look and feel, GNU Typist's touch typing
 courses, and keybr.com's adaptive learning path and typing analytics. Next.js 15, React 19, Tailwind v4. Everything runs in the browser;
