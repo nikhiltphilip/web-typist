@@ -1,8 +1,17 @@
 import Link from "next/link";
+import { Fragment } from "react";
 
 const h2 = "text-2xl text-sub";
 const p = "max-w-[75ch] leading-relaxed text-text";
 const a = "text-main underline-offset-4 hover:underline";
+
+const SHORTCUTS: [string[], string][] = [
+  [["tab", "enter"], "restart the test"],
+  [["esc"], "command line (outside courses)"],
+  [["ctrl", "shift", "p"], "command line"],
+  [["enter"], "next line in a course"],
+  [["esc"], "skip or restart a course exercise"],
+];
 
 export default function About() {
   return (
@@ -37,6 +46,24 @@ export default function About() {
           made-up words otherwise. The cursor waits for the right key. See how you are doing in{" "}
           <Link className={a} href="/analytics">analytics</Link>.
         </p>
+      </section>
+      <section className="grid gap-4">
+        <h2 className={h2}>keyboard shortcuts</h2>
+        <dl className="grid max-w-[75ch] grid-cols-[auto_1fr] gap-x-6 gap-y-2 leading-relaxed">
+          {SHORTCUTS.map(([keys, what]) => (
+            <Fragment key={what}>
+              <dt className="text-sub">
+                {keys.map((k, i) => (
+                  <Fragment key={k}>
+                    {i > 0 && " + "}
+                    <kbd>{k}</kbd>
+                  </Fragment>
+                ))}
+              </dt>
+              <dd className="text-text">{what}</dd>
+            </Fragment>
+          ))}
+        </dl>
       </section>
       <section className="grid gap-4">
         <h2 className={h2}>license</h2>

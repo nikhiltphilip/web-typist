@@ -183,7 +183,9 @@ export class WordsTest {
 
   liveAcc(): number {
     if (!this.keys.length) return 100;
-    return Math.floor((this.keys.filter((k) => k.correct).length / this.keys.length) * 100);
+    let correct = 0;
+    for (const k of this.keys) if (k.correct) correct++;
+    return Math.floor((correct / this.keys.length) * 100);
   }
 
   counts(creditPartial: boolean): CharCounts {

@@ -1,17 +1,16 @@
-import { AtSignIcon, ClockIcon, HashIcon, MountainIcon, PencilIcon, QuoteIcon, TypeIcon, WrenchIcon, type LucideIcon } from "lucide-react";
 import { useState } from "react";
+import type { Mode } from "@/lib/engine/words";
 import { setSetting, useSettings, type QuoteLength, type Settings } from "@/lib/settings";
+import { Select, type Option } from "../Select";
 import { Button, cn } from "../ui";
 
-const card = "card rounded-(--roundness) bg-sub-alt px-(--horizontal-padding) flex";
-const btn = "px-(--horizontal-padding) py-(--vertical-padding)";
-// Monkeytype's responsive sizing variables for the config bar.
-const vars =
-  "[--card-gap:0.25em] [--font-size:0.5em] [--horizontal-padding:0.4em] [--vertical-padding:0.5rem] md:[--card-gap:1em] md:[--font-size:0.6em] md:[--horizontal-padding:0.45em] md:[--vertical-padding:0.75rem] lg:[--font-size:0.75em] lg:[--horizontal-padding:0.5em] xl:[--card-gap:2em] xl:[--horizontal-padding:1em]";
+const opts = <T,>(values: T[]): Option<T>[] => values.map((v) => ({ value: v, label: String(v) }));
 
-function TC({ active, onClick, icon, text, disabled }: { active?: boolean; onClick: () => void; icon?: LucideIcon; text?: string; disabled?: boolean }) {
-  return <Button variant="text" active={active} onClick={onClick} icon={icon} text={text} disabled={disabled} className={btn} />;
-}
+const MODES = opts<Mode>(["time", "words", "quote", "zen", "custom"]);
+const TIMES = opts([15, 30, 60, 120]);
+const WORDS = opts([10, 25, 50, 100]);
+const QUOTES = opts<QuoteLength>(["all", "short", "medium", "long"]);
+const EXTRAS = opts<"punctuation" | "numbers">(["punctuation", "numbers"]);
 
 export function TestConfig({ hidden, onChange }: { hidden: boolean; onChange: () => void }) {
   const s = useSettings();
@@ -20,45 +19,25 @@ export function TestConfig({ hidden, onChange }: { hidden: boolean; onChange: ()
     setSetting(k, v);
     onChange();
   };
-
-  const mode2 =
-    s.mode === "time"
-      ? [15, 30, 60, 120].map((t) => <TC key={t} text={String(t)} active={s.time === t} onClick={() => set("time", t)} />)
-      : s.mode === "words"
-        ? [10, 25, 50, 100].map((w) => <TC key={w} text={String(w)} active={s.words === w} onClick={() => set("words", w)} />)
-        : s.mode === "quote"
-          ? (["all", "short", "medium", "long"] as QuoteLength[]).map((q) => (
-              <TC key={q} text={q} active={s.quoteLength === q} onClick={() => set("quoteLength", q)} />
-            ))
-          : s.mode === "custom"
-            ? [<TC key="c" icon={PencilIcon} text="change" onClick={() => setCustomOpen(true)} />]
-            : null;
+  const extras = EXTRAS.filter((o) => s[o.value]).map((o) => o.value);
 
   return (
     <>
-      <div
-        className={cn(
-          vars,
-          "hide-on-focus relative mx-auto mb-8 hidden w-max grid-cols-[1fr_auto_1fr] place-self-center [font-size:var(--font-size)] md:grid",
-          hidden && "pointer-events-none opacity-0",
+      <div className={cn("hide-on-focus mb-8 flex flex-wrap items-center justify-center gap-2 text-sm", hidden && "pointer-events-none invisible")}>
+        <Select value={s.mode} options={MODES} onChange={(v) => set("mode", v)} />
+        {s.mode === "time" && <Select value={s.time} options={TIMES} onChange={(v) => set("time", v)} />}
+        {s.mode === "words" && <Select value={s.words} options={WORDS} onChange={(v) => set("words", v)} />}
+        {s.mode === "quote" && <Select value={s.quoteLength} options={QUOTES} onChange={(v) => set("quoteLength", v)} />}
+        {s.mode === "custom" && <Button variant="text" text="edit text" onClick={() => setCustomOpen(true)} />}
+        {(s.mode === "time" || s.mode === "words") && (
+          <Select
+            label={extras.length ? extras.join(" + ") : "plain"}
+            options={EXTRAS}
+            isSelected={(v) => s[v]}
+            onChange={(v) => set(v, !s[v])}
+            keepOpen
+          />
         )}
-      >
-        <div className={cn("mr-(--card-gap) w-max place-self-end", (s.mode === "zen" || s.mode === "quote" || s.mode === "custom") && "invisible")}>
-          <div className={card}>
-            <TC icon={AtSignIcon} text="punctuation" active={s.punctuation} onClick={() => set("punctuation", !s.punctuation)} />
-            <TC icon={HashIcon} text="numbers" active={s.numbers} onClick={() => set("numbers", !s.numbers)} />
-          </div>
-        </div>
-        <div className={card}>
-          <TC icon={ClockIcon} text="time" active={s.mode === "time"} onClick={() => set("mode", "time")} />
-          <TC icon={TypeIcon} text="words" active={s.mode === "words"} onClick={() => set("mode", "words")} />
-          <TC icon={QuoteIcon} text="quote" active={s.mode === "quote"} onClick={() => set("mode", "quote")} />
-          <TC icon={MountainIcon} text="zen" active={s.mode === "zen"} onClick={() => set("mode", "zen")} />
-          <TC icon={WrenchIcon} text="custom" active={s.mode === "custom"} onClick={() => set("mode", "custom")} />
-        </div>
-        <div className={cn("ml-(--card-gap) w-max place-self-start", !mode2 && "invisible")}>
-          <div className={card}>{mode2}</div>
-        </div>
       </div>
       {customOpen && (
         <CustomTextModal

@@ -4,7 +4,7 @@ import { Command } from "cmdk";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { closePalette, usePalette } from "@/lib/focus";
-import { FONTS, getSettings, setSetting, useSettings, type Settings } from "@/lib/settings";
+import { FONT_SIZES, FONTS, getSettings, setSetting, useSettings, type Settings } from "@/lib/settings";
 import { applyTheme, THEME_NAMES, THEMES } from "@/lib/themes";
 import { restartEvent } from "./Header";
 import { cn } from "./ui";
@@ -57,10 +57,11 @@ export function CommandLine() {
       numbers: { title: "numbers", items: choice("numbers", [true, false], true, (v) => (v ? "on" : "off")) },
       language: { title: "language", items: choice("language", ["english", "english_1k", "english_5k", "english_10k"], true, (v) => v.replace("_", " ")) },
       font: { title: "font family", items: choice("font", FONTS) },
-      fontSize: { title: "font size", items: choice("fontSize", [1, 1.25, 1.5, 2, 2.5, 3, 4]) },
+      fontSize: { title: "font size", items: choice("fontSize", FONT_SIZES, false, (v) => `${v}px`) },
       caretStyle: { title: "caret style", items: choice("caretStyle", ["off", "default", "block", "outline", "underline"]) },
       smoothCaret: { title: "smooth caret", items: choice("smoothCaret", ["off", "slow", "medium", "fast"]) },
       sound: { title: "sound on click", items: choice("sound", ["off", "click1", "click4", "click6"]) },
+      liveTimer: { title: "live timer", items: choice("liveTimer", [true, false], false, (v) => (v ? "show" : "hide")) },
       liveSpeed: { title: "live speed", items: choice("liveSpeed", [true, false], false, (v) => (v ? "show" : "hide")) },
       liveAcc: { title: "live accuracy", items: choice("liveAcc", [true, false], false, (v) => (v ? "show" : "hide")) },
       wordProcessor: { title: "word processor mode (courses)", items: choice("wordProcessor", [true, false], false, (v) => (v ? "on" : "off")) },

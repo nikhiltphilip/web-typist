@@ -54,7 +54,7 @@ export function useCaret(opts: {
   const metrics = useRef<Metrics | null>(null);
   // Last values written, so unchanged styles aren't re-set (each write
   // invalidates style and can cost a recalc).
-  const written = useRef({ shift: "", height: "", caret: "", width: "", hidden: false });
+  const written = useRef({ shift: "", height: "", caret: "", width: "", hidden: false, under: null as HTMLElement | null });
   const place = useRef<() => void>(() => {});
 
   place.current = () => {
@@ -64,6 +64,13 @@ export function useCaret(opts: {
     if (!wrapper || !inner || !caret) return;
     const w = written.current;
     const t = target();
+    // A block caret sits behind the text, so the letter under it is drawn in
+    // the background colour to stay readable.
+    const under = t && caretStyle === "block" && !t.after ? t.el : null;
+    if (under !== w.under) w.under?.classList.remove("under-caret");
+    // Re-added every time: React drops it when it re-renders the letter's class.
+    if (under && !under.classList.contains("under-caret")) under.classList.add("under-caret");
+    w.under = under;
     if (!t) {
       if (!w.hidden) caret.style.opacity = "0";
       w.hidden = true;

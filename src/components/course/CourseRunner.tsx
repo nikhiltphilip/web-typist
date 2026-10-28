@@ -28,8 +28,8 @@ const MODE_LABEL: Record<View["kind"], string> = {
   exit: "",
 };
 
-function Hint({ children }: { children: React.ReactNode }) {
-  return <div className="text-center text-xs leading-[2] text-sub">{children}</div>;
+function Hint({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <div className={cn("text-center text-xs leading-[2] text-sub", className)}>{children}</div>;
 }
 
 // ── views ──────────────────────────────────────────────────────────────────
@@ -90,16 +90,16 @@ function Menu({ player, items, title, passed }: { player: CoursePlayer; items: M
 }
 
 function DrillLive({ drill }: { drill: StreamDrill }) {
-  const { fontSize, liveSpeed } = useSettings();
+  const { fontSize, liveTimer, liveSpeed } = useSettings();
   const text = useLiveText(drill.subscribe, () =>
-    drill.started ? [`${Math.floor(drill.elapsedMs() / 1000)}s`, liveSpeed ? String(drill.liveWpm()) : "", drill.errors ? `${drill.errors}✗` : ""].join("|") : "",
+    drill.started ? [liveTimer ? `${Math.floor(drill.elapsedMs() / 1000)}s` : "", liveSpeed ? String(drill.liveWpm()) : "", drill.errors ? `${drill.errors}✗` : ""].join("|") : "",
   );
-  const style = { fontSize: `${Math.min(fontSize, 1.5)}rem` };
+  const style = { fontSize: `${Math.min(fontSize, 24)}px` };
   if (!text) return <div className="h-[1em]" style={style} />;
   const [time, wpm, errors] = text.split("|");
   return (
     <div className="flex h-[1em] gap-[0.75em] leading-[1em] text-main" style={style}>
-      <span>{time}</span>
+      {time && <span>{time}</span>}
       {wpm && <span>{wpm}</span>}
       {errors && <span className="text-error">{errors}</span>}
     </div>
@@ -117,12 +117,12 @@ function Drill({ view, instruction, maxError, blurred }: { view: Extract<View, {
   const practice = view.drillKind === "d" || view.drillKind === "s";
   return (
     <div className="grid gap-6">
-      {instruction.length > 0 && <div className="text-[1.05rem] leading-[1.6] whitespace-pre-wrap text-sub">{instruction.join("\n")}</div>}
+      {instruction.length > 0 && <div className="hide-on-focus text-[1.05rem] leading-[1.6] whitespace-pre-wrap text-sub">{instruction.join("\n")}</div>}
       <div className="grid gap-1">
         <DrillLive drill={view.drill} />
         <StreamView drill={view.drill} blurred={blurred} />
       </div>
-      <Hint>
+      <Hint className="hide-on-focus">
         {speed ? "speed test" : "drill"}
         {practice ? " · practice only" : ` · max ${maxError.toFixed(1)}% errors`}
         {view.attempt > 1 ? ` · attempt ${view.attempt}` : ""} · <Kbd>enter</Kbd> at each ⏎ ·{" "}

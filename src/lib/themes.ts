@@ -14,9 +14,10 @@ export interface Theme {
   colorfulErrorExtra: string;
 }
 
-export const DEFAULT_THEME = "catppuccin";
+export const DEFAULT_THEME = "fuyu";
 
 export const THEMES: Record<string, Theme> = {
+  fuyu: { bg: "#20252f", caret: "#a1d6fd", main: "#a1d6fd", sub: "#89919d", subAlt: "#141923", text: "#dbe3f1", error: "#f1b8b6", errorExtra: "#febbba", colorfulError: "#f1b8b6", colorfulErrorExtra: "#febbba" },
   catppuccin: { bg: "#1e1e2e", caret: "#f2cdcd", main: "#cba6f7", sub: "#7f849c", subAlt: "#181825", text: "#cdd6f4", error: "#f38ba8", errorExtra: "#eba0ac", colorfulError: "#f38ba8", colorfulErrorExtra: "#eba0ac" },
   "8008": { bg: "#333a45", caret: "#f44c7f", main: "#f44c7f", sub: "#939eae", subAlt: "#2e343d", text: "#e9ecf0", error: "#da3333", errorExtra: "#791717", colorfulError: "#c5da33", colorfulErrorExtra: "#849224" },
   alduin: { bg: "#1c1c1c", caret: "#e3e3e3", main: "#dfd7af", sub: "#444444", subAlt: "#242424", text: "#f5f3ed", error: "#af5f5f", errorExtra: "#4d2113", colorfulError: "#af5f5f", colorfulErrorExtra: "#4d2113" },

@@ -2,7 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { AdaptiveInput } from "./input";
-import { DEFAULT_LEARN, generateText, guidedKeys, learningRate, unlockOrder } from "./lesson";
+import { DEFAULT_LEARN, generateText, guidedKeys, learningRate, type LessonKey, unlockOrder } from "./lesson";
+import type { LearnSettings } from "./settings";
 import { Filter, type ModelData, PhoneticModel } from "./model";
 import { stepsFromKeystrokes } from "./record";
 import { type KeySample, makeKeyStatsMap, makeResult, speedToTime, streaks, summaryStats, type TypingResult } from "./stats";
@@ -70,6 +71,37 @@ describe("guided lesson (keybr GuidedLesson.update)", () => {
   it("alphabet size forces extra keys in", () => {
     const keys = guidedKeys(order, makeKeyStatsMap(cps, []), { ...DEFAULT_LEARN, alphabetSize: 1 });
     expect(keys.filter((k) => k.included)).toHaveLength(order.length);
+  });
+
+  it("picks the same keys and focus as keybr's original rescanning loop", () => {
+    // keybr's GuidedLesson.update as first ported, rescanning the included set per key.
+    const reference = (keys: LessonKey[], s: LearnSettings) => {
+      const maxSize = 6 + Math.round((keys.length - 6) * s.alphabetSize);
+      const included = () => keys.filter((k) => k.included);
+      const conf = (k: LessonKey) => (s.recoverKeys ? (k.confidence ?? 0) : (k.bestConfidence ?? 0));
+      for (const k of keys) {
+        const inc = included();
+        if (inc.length < 6) k.included = true;
+        else if (inc.length < maxSize) k.included = k.forced = true;
+        else if ((k.bestConfidence ?? 0) >= 1) k.included = true;
+        else if (inc.every((x) => conf(x) >= 1)) k.included = true;
+      }
+      const weakest = included().filter((k) => conf(k) < 1).sort((a, b) => conf(a) - conf(b))[0];
+      if (weakest) weakest.focused = true;
+    };
+    const flags = (keys: LessonKey[]) => keys.map((k) => `${+k.included}${+k.forced}${+k.focused}`).join(" ");
+    const target = speedToTime(DEFAULT_LEARN.targetSpeed);
+    const rng = lcg(7);
+    for (let round = 0; round < 500; round++) {
+      const s = { ...DEFAULT_LEARN, alphabetSize: [0, 0, 0.25, 1][Math.floor(rng() * 4)], recoverKeys: rng() < 0.5 };
+      const results = Array.from({ length: 1 + Math.floor(rng() * 4) }, (_, i) =>
+        result(i, cps.filter(() => rng() < 0.6), target * [0.5, 0.9, 1, 1.5, 3][Math.floor(rng() * 5)]),
+      );
+      const got = guidedKeys(order, makeKeyStatsMap(cps, results), s);
+      const want = got.map((k) => ({ ...k, included: false, forced: false, focused: false }));
+      reference(want, s);
+      expect(flags(got)).toBe(flags(want));
+    }
   });
 
   it("generates a 100+ character lesson from the included keys", () => {

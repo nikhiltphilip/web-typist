@@ -15,12 +15,14 @@ export type Language = "english" | "english_1k" | "english_5k" | "english_10k";
 export interface Settings {
   theme: string;
   font: string;
+  /** Typing text size in px. */
   fontSize: number;
   caretStyle: CaretStyle;
   smoothCaret: SmoothCaret;
   sound: SoundPack;
   errorSound: boolean;
   volume: number;
+  liveTimer: boolean;
   liveSpeed: boolean;
   liveAcc: boolean;
   // test config bar
@@ -44,12 +46,13 @@ export interface Settings {
 export const DEFAULT_SETTINGS: Settings = {
   theme: DEFAULT_THEME,
   font: "Roboto Mono",
-  fontSize: 2,
+  fontSize: 32,
   caretStyle: "default",
   smoothCaret: "medium",
   sound: "off",
   errorSound: false,
   volume: 0.5,
+  liveTimer: true,
   liveSpeed: false,
   liveAcc: false,
   mode: "time",
@@ -66,6 +69,8 @@ export const DEFAULT_SETTINGS: Settings = {
   alwaysSure: false,
   learn: DEFAULT_LEARN,
 };
+
+export const FONT_SIZES = [16, 20, 24, 28, 32, 40, 48];
 
 export const FONTS = [
   "Roboto Mono",
@@ -94,6 +99,8 @@ function load(): Settings {
     if (raw) {
       const saved = JSON.parse(raw);
       current = { ...DEFAULT_SETTINGS, ...saved, learn: { ...DEFAULT_LEARN, ...saved.learn } };
+      // Font size used to be stored in rem.
+      if (current.fontSize < 8) current.fontSize *= 16;
     }
   } catch {
     // storage blocked or corrupt: keep defaults

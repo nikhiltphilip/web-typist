@@ -62,17 +62,21 @@ export function guidedKeys(letters: readonly Letter[], map: KeyStatsMap, s: Lear
   const minSize = 6;
   const maxSize = minSize + Math.round((letters.length - minSize) * s.alphabetSize);
   const keys = letters.map((l) => lessonKey(l, map, s.targetSpeed));
-  const included = () => keys.filter((k) => k.included);
   const conf = (k: LessonKey) => (s.recoverKeys ? (k.confidence ?? 0) : (k.bestConfidence ?? 0));
 
+  // One pass, counting included keys still below target as they're added,
+  // instead of rescanning the included set for every key (O(n²); analytics
+  // runs this once per stored result).
+  const included: LessonKey[] = [];
+  let belowTarget = 0;
   for (const k of keys) {
-    const inc = included();
-    if (inc.length < minSize) k.included = true;
-    else if (inc.length < maxSize) k.included = k.forced = true;
-    else if ((k.bestConfidence ?? 0) >= 1) k.included = true;
-    else if (inc.every((x) => conf(x) >= 1)) k.included = true;
+    if (included.length >= maxSize && (k.bestConfidence ?? 0) < 1 && belowTarget > 0) continue;
+    k.included = true;
+    k.forced = included.length >= minSize && included.length < maxSize;
+    included.push(k);
+    if (conf(k) < 1) belowTarget++;
   }
-  const weakest = included()
+  const weakest = included
     .filter((k) => conf(k) < 1)
     .sort((a, b) => conf(a) - conf(b))[0];
   if (weakest) weakest.focused = true;

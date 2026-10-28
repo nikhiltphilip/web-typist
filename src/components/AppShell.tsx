@@ -7,7 +7,6 @@ import { useSettings } from "@/lib/settings";
 import { preloadSounds } from "@/lib/sound";
 import { applyTheme } from "@/lib/themes";
 import { CommandLine } from "./CommandLine";
-import { Footer } from "./Footer";
 import { Header } from "./Header";
 
 // The result chart (Chart.js) isn't needed until a test ends: it's split out
@@ -42,10 +41,9 @@ export function AppShell({ children }: { children: ReactNode }) {
     idle(preload);
   }, []);
 
-  // Sound packs are decoded ahead of the first keystroke.
-  useEffect(() => {
-    if (settings.sound !== "off" || settings.errorSound) idle(preloadSounds);
-  }, [settings.sound, settings.errorSound]);
+  // Sound packs are decoded ahead of the first keystroke, and ones switched
+  // off are freed.
+  useEffect(() => idle(preloadSounds), [settings.sound, settings.errorSound]);
 
   // Moving the mouse leaves focus mode, like Monkeytype.
   useEffect(() => {
@@ -74,12 +72,9 @@ export function AppShell({ children }: { children: ReactNode }) {
   }, [pathname]);
 
   return (
-    <div
-      className="content-grid grid min-h-screen grid-rows-[auto_1fr_auto] gap-y-8 py-8"
-    >
+    <div className="content-grid grid min-h-screen grid-rows-[auto_1fr] gap-y-8 py-8">
       <Header />
       <main className="grid">{children}</main>
-      <Footer />
       <CommandLineGate />
     </div>
   );

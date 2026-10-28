@@ -25,7 +25,7 @@ const Word = memo(function Word({ word, input, active, typed }: { word: string; 
   return <div className={cn("word", active && "active", typed && input !== word && "error")}>{letters}</div>;
 });
 
-/** Monkeytype's #words: three visible lines, the active word kept on line two. */
+/** Monkeytype's #words, six lines tall, the active word kept on the third. */
 export function WordsView({ test, blurred }: { test: WordsTest; blurred?: boolean }) {
   const version = useSyncExternalStore(test.subscribe, () => test.version, () => 0);
   const { fontSize, caretStyle } = useSettings();
@@ -46,14 +46,14 @@ export function WordsView({ test, blurred }: { test: WordsTest; blurred?: boolea
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [test, version]);
 
-  useCaret({ wrapperRef, innerRef, caretRef, target, visibleLines: 3, keepLine: 1, caretStyle, fontSize });
+  useCaret({ wrapperRef, innerRef, caretRef, target, visibleLines: 6, keepLine: 2, caretStyle, fontSize });
 
   const items = test.words.map((w, i) => (
     <Word key={i} word={w} input={test.inputs[i]} active={i === test.active} typed={i < test.active} />
   ));
 
   return (
-    <div ref={wrapperRef} className={cn("relative overflow-x-visible overflow-y-clip transition-[filter,opacity] duration-250", blurred && "blurred")} style={{ fontSize: `${fontSize}rem`, height: "4.65em" }}>
+    <div ref={wrapperRef} className={cn("relative overflow-x-visible overflow-y-clip transition-[filter,opacity] duration-250", blurred && "blurred")} style={{ fontSize: `${fontSize}px`, height: "9.3em" }}>
       <div ref={caretRef} className={cn("caret", caretStyle !== "default" && caretStyle)} />
       <div ref={innerRef} className="words relative" style={{ marginLeft: "-0.3em", width: "calc(100% + 0.6em)" }}>
         {items}

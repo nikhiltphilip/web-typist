@@ -45,7 +45,7 @@ function mode2(s: Settings, quote: Quote | null): string {
 }
 
 function LiveStats({ test }: { test: WordsTest }) {
-  const { liveSpeed, liveAcc } = useSettings();
+  const { liveTimer, liveSpeed, liveAcc } = useSettings();
   const text = useLiveText(test.subscribe, () => {
     if (!test.started || test.done) return "";
     const timer =
@@ -54,13 +54,13 @@ function LiveStats({ test }: { test: WordsTest }) {
         : test.mode === "zen"
           ? String(test.active)
           : `${test.active}/${test.words.length}`;
-    return [timer, liveSpeed ? String(test.liveWpm()) : "", liveAcc ? `${test.liveAcc()}%` : ""].join("|");
+    return [liveTimer ? timer : "", liveSpeed ? String(test.liveWpm()) : "", liveAcc ? `${test.liveAcc()}%` : ""].join("|");
   });
   if (!text) return <div className="h-[1em]" />;
   const [timer, wpm, acc] = text.split("|");
   return (
     <div className="flex h-[1em] gap-[0.5em] leading-[1em] text-main">
-      <div>{timer}</div>
+      {timer && <div>{timer}</div>}
       {wpm && <div>{wpm}</div>}
       {acc && <div>{acc}</div>}
     </div>
@@ -128,6 +128,8 @@ export function TypingTest() {
   useEffect(() => {
     if (!test) return;
     const unsub = test.subscribe(() => test.done && !result && finish(test));
+    // Only a timed test can end without a keystroke.
+    if (test.mode !== "time") return unsub;
     const id = setInterval(() => test.tick(), 50);
     return () => {
       unsub();
@@ -167,7 +169,7 @@ export function TypingTest() {
       <TestConfig hidden={!!result} onChange={() => restart()} />
       {!result && test && (
         <div className="relative">
-          <div style={{ fontSize: `${settings.fontSize}rem` }} className="mb-1">
+          <div style={{ fontSize: `${settings.fontSize}px` }} className="mb-1">
             <LiveStats test={test} />
           </div>
           <WordsView test={test} blurred={!windowFocused} />

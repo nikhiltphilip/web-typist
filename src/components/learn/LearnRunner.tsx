@@ -8,7 +8,7 @@ import { setFocused } from "@/lib/focus";
 import { AdaptiveInput } from "@/lib/learn/input";
 import { allKeys, generateText, guidedKeys, learningRate, type LessonKey, type LessonType, type TextSources, unlockOrder } from "@/lib/learn/lesson";
 import { Letter, loadModel } from "@/lib/learn/model";
-import { cpmToWpm, dailyStats, dayKey, isValidResult, makeKeyStatsMap, makeResult, speedOf, streaks, summaryStats, type TypingResult } from "@/lib/learn/stats";
+import { cpmToWpm, dailyStats, dayKey, isValidResult, KeyStatsBuilder, makeResult, speedOf, streaks, summaryStats, type TypingResult } from "@/lib/learn/stats";
 import { getSettings, setSetting, useSettings } from "@/lib/settings";
 import { playKey } from "@/lib/sound";
 import { useKeys, useWindowFocus } from "@/lib/useKeys";
@@ -87,12 +87,17 @@ export function LearnRunner() {
     return s.type === "numbers" ? DIGITS : unlockOrder(sources.model, s.keyboardOrder);
   }, [sources, s.type, s.keyboardOrder]);
 
+  // Results are only ever appended, so key stats are built up incrementally
+  // rather than from the whole history after every lesson.
+  const stats = useRef<{ letters: readonly Letter[]; seen: readonly TypingResult[]; builder: KeyStatsBuilder } | null>(null);
   const keysFor = useCallback(
     (rs: readonly TypingResult[]): LessonKey[] => {
-      const map = makeKeyStatsMap(
-        letters.map((l) => l.codePoint),
-        rs,
-      );
+      let c = stats.current;
+      const appended = c && c.letters === letters && c.seen.length <= rs.length && rs[c.seen.length - 1] === c.seen[c.seen.length - 1];
+      if (!c || !appended) c = stats.current = { letters, seen: [], builder: new KeyStatsBuilder(letters.map((l) => l.codePoint)) };
+      for (let i = c.seen.length; i < rs.length; i++) c.builder.add(rs[i]);
+      c.seen = rs;
+      const map = c.builder.map;
       return s.type === "guided" ? guidedKeys(letters, map, s) : allKeys(letters, map, s);
     },
     [letters, s],
@@ -213,7 +218,7 @@ export function LearnRunner() {
 
       <div className="relative">
         <div className={cn("pointer-events-none absolute -top-8 left-0 text-sm text-main transition-opacity duration-300", toast ? "opacity-100" : "opacity-0")}>{toast}</div>
-        {input && <StreamView key={input.chars.join("")} drill={input} visibleLines={3} keepLine={1} maxSize={2} blurred={!windowFocused} />}
+        {input && <StreamView key={input.chars.join("")} drill={input} visibleLines={3} keepLine={1} maxSize={32} blurred={!windowFocused} />}
         {!windowFocused && <div className="absolute inset-0 grid place-items-center text-base text-text">Click here or press any key to focus</div>}
       </div>
 

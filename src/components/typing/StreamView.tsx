@@ -1,4 +1,4 @@
-import { memo, type ReactNode, useCallback, useMemo, useRef, useSyncExternalStore } from "react";
+import { memo, type ReactNode, useCallback, useLayoutEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import type { Mark } from "@/lib/engine/stream";
 import { useSettings } from "@/lib/settings";
 import { cn } from "../ui";
@@ -52,15 +52,23 @@ export interface StreamSource {
   subscribe(l: () => void): () => void;
 }
 
-const Run = memo(function Run({ text, marks, from, garbage, garbageAt }: { text: string; marks: string; from: number; garbage?: string; garbageAt?: number }) {
+/**
+ * One word or space. `chars` and `marks` are the drill's own arrays, mutated
+ * in place, so memo can't see mark changes: `stamp` changes instead, and only
+ * for runs near the cursor, so every other run skips re-rendering.
+ */
+const Run = memo(function Run({ chars, marks, from, to, garbage, garbageAt }: { chars: readonly string[]; marks: readonly Mark[]; from: number; to: number; stamp: number; garbage?: string; garbageAt?: number }) {
   const out: ReactNode[] = [];
-  Array.from(text).forEach((c, k) => {
-    if (garbage && garbageAt === from + k)
+  for (let i = from; i < to; i++) {
+    if (garbage && garbageAt === i)
       Array.from(garbage).forEach((g, j) => out.push(<span key={`g${j}`} data-g={j} className="letter incorrect extra">{g === " " ? "_" : g}</span>));
-    out.push(<Letter key={k} c={c} mark={marks[k] === "c" ? "correct" : marks[k] === "x" ? "incorrect" : "untyped"} i={from + k} />);
-  });
-  return <div className={cn("word", text === " " && "space-word")}>{out}</div>;
+    out.push(<Letter key={i} c={chars[i]} mark={marks[i]} i={i} />);
+  }
+  return <div className={cn("word", to - from === 1 && chars[from] === " " && "space-word")}>{out}</div>;
 });
+
+/** How far from the cursor one keystroke can change marks (error re-sync, doubled keys). */
+const DIRTY_MARGIN = 8;
 
 /**
  * Course drill text in Monkeytype's style: same letters, colours and caret,
@@ -70,13 +78,13 @@ export function StreamView({
   drill,
   visibleLines = 6,
   keepLine = 2,
-  maxSize = 1.5,
+  maxSize = 24,
   blurred,
 }: {
   drill: StreamSource;
   visibleLines?: number;
   keepLine?: number;
-  /** Cap on the font size in rem (course lines must fit 80 columns). */
+  /** Cap on the font size in px (course lines must fit 80 columns). */
   maxSize?: number;
   blurred?: boolean;
 }) {
@@ -86,6 +94,15 @@ export function StreamView({
   const innerRef = useRef<HTMLDivElement>(null);
   const caretRef = useRef<HTMLDivElement>(null);
   const lines = useMemo(() => tokenize(drill.chars), [drill]);
+
+  // Marks change only between where the cursor was and where it is now (a
+  // keystroke can jump it, e.g. skipping a word), so only those runs re-render.
+  const lastPos = useRef(drill.pos);
+  const dirtyFrom = Math.min(lastPos.current, drill.pos) - DIRTY_MARGIN;
+  const dirtyTo = Math.max(lastPos.current, drill.pos) + DIRTY_MARGIN;
+  useLayoutEffect(() => {
+    lastPos.current = drill.pos;
+  });
 
   const target = useCallback(() => {
     const inner = innerRef.current;
@@ -103,10 +120,8 @@ export function StreamView({
   useCaret({ wrapperRef, innerRef, caretRef, target, visibleLines, keepLine, caretStyle, fontSize: size });
   const garbage = drill.garbage?.join("") || undefined;
 
-  const code = (m: Mark) => (m === "correct" ? "c" : m === "incorrect" ? "x" : "u");
-
   return (
-    <div ref={wrapperRef} className={cn("relative overflow-x-visible overflow-y-clip transition-[filter,opacity] duration-250", blurred && "blurred")} style={{ fontSize: `${size}rem` }}>
+    <div ref={wrapperRef} className={cn("relative overflow-x-visible overflow-y-clip transition-[filter,opacity] duration-250", blurred && "blurred")} style={{ fontSize: `${size}px` }}>
       <div ref={caretRef} className={cn("caret", caretStyle !== "default" && caretStyle)} />
       <div ref={innerRef} className="words relative" style={{ whiteSpace: "pre" }}>
         {lines.map((line, li) => (
@@ -114,9 +129,11 @@ export function StreamView({
             {line.map((tok) => (
               <Run
                 key={tok.from}
+                chars={drill.chars}
+                marks={drill.marks}
                 from={tok.from}
-                text={drill.chars.slice(tok.from, tok.to).join("")}
-                marks={drill.marks.slice(tok.from, tok.to).map(code).join("")}
+                to={tok.to}
+                stamp={tok.to > dirtyFrom && tok.from < dirtyTo ? version : 0}
                 {...(garbage && drill.pos >= tok.from && drill.pos < tok.to ? { garbage, garbageAt: drill.pos } : {})}
               />
             ))}

@@ -47,7 +47,7 @@ export function ChartBox({ build, deps, height = 240 }: { build: (p: Palette) =>
   useEffect(() => {
     let chart: Chart | null = null;
     let live = true;
-    import("chart.js/auto").then(({ default: ChartJs }) => {
+    import("@/lib/chart").then(({ Chart: ChartJs }) => {
       if (!live || !ref.current) return;
       const p: Palette = {
         main: css("--main-color"),

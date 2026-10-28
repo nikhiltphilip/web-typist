@@ -1,18 +1,7 @@
-import {
-  Chart,
-  LinearScale,
-  LineController,
-  LineElement,
-  PointElement,
-  ScatterController,
-  Filler,
-  Tooltip,
-} from "chart.js";
 import { useEffect, useRef } from "react";
+import { Chart } from "@/lib/chart";
 import type { ChartPoint } from "@/lib/engine/stats";
 import { useSettings } from "@/lib/settings";
-
-Chart.register(LinearScale, LineController, LineElement, PointElement, ScatterController, Filler, Tooltip);
 
 const css = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 

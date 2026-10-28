@@ -117,6 +117,7 @@ function ProgressOverview({ results, model, target, keyboardOrder }: { results: 
     return { unlocks, finalKeys: guidedKeys(letters, b.map, learn) };
   }, [results, model, keyboardOrder, learn]);
   const speeds = results.map((r) => wpm(speedOf(r)));
+  const smoothed = smooth(speeds, 0.3);
   return (
     <div className="grid gap-4">
       <div className="flex flex-wrap gap-1">
@@ -138,12 +139,12 @@ function ProgressOverview({ results, model, target, keyboardOrder }: { results: 
           data: {
             labels: speeds.map((_, i) => i + 1),
             datasets: [
-              { label: "speed", data: smooth(speeds, 0.3), borderColor: p.main, backgroundColor: alpha(p.main, 0.12), fill: true, pointRadius: 0, tension: 0.3 },
+              { label: "speed", data: smoothed, borderColor: p.main, backgroundColor: alpha(p.main, 0.12), fill: true, pointRadius: 0, tension: 0.3 },
               { label: "target", data: speeds.map(() => wpm(target)), borderColor: p.sub, borderDash: [6, 6], pointRadius: 0, borderWidth: 1 },
               {
                 type: "scatter",
                 label: "new key",
-                data: unlocks.map((u) => ({ x: u.index - 1, y: smooth(speeds, 0.3)[u.index - 1] ?? 0, keys: u.keys.join(" ") })),
+                data: unlocks.map((u) => ({ x: u.index - 1, y: smoothed[u.index - 1] ?? 0, keys: u.keys.join(" ") })),
                 pointStyle: "rectRounded",
                 pointRadius: 6,
                 backgroundColor: p.text,

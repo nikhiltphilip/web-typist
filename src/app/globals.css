@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 /* Colour tokens. Values are set at runtime by applyTheme() (and by the
-   pre-paint script in layout.tsx); these defaults are catppuccin. */
+   pre-paint script in layout.tsx); these defaults are fuyu. */
 :root {
-  --bg-color: #1e1e2e;
-  --caret-color: #f2cdcd;
-  --main-color: #cba6f7;
-  --sub-color: #7f849c;
-  --sub-alt-color: #181825;
-  --text-color: #cdd6f4;
-  --error-color: #f38ba8;
-  --error-extra-color: #eba0ac;
-  --colorful-error-color: #f38ba8;
-  --colorful-error-extra-color: #eba0ac;
-  --roundness: 0.5rem;
+  --bg-color: #20252f;
+  --caret-color: #a1d6fd;
+  --main-color: #a1d6fd;
+  --sub-color: #89919d;
+  --sub-alt-color: #141923;
+  --text-color: #dbe3f1;
+  --error-color: #f1b8b6;
+  --error-extra-color: #febbba;
+  --colorful-error-color: #f1b8b6;
+  --colorful-error-extra-color: #febbba;
+  --roundness: 0;
   --font: "Roboto Mono", monospace;
   --caret-speed: 100ms;
   --caret-ease: linear(0, 0.0281, 0.0669, 0.111, 0.1591, 0.2102, 0.264, 0.3201, 0.3783, 0.4383, 0.5, 0.5617, 0.6217, 0.6799, 0.736, 0.7898, 0.8409, 0.889, 0.9331, 0.9719, 1);
@@ -91,24 +91,15 @@ body {
   }
 }
 
-/* catppuccin colours each nav icon (Monkeytype static/themes/catppuccin.css) */
-[data-theme="catppuccin"] [data-nav-item="test"] { color: #f38ba8; }
-[data-theme="catppuccin"] [data-nav-item="courses"] { color: #fab387; }
-[data-theme="catppuccin"] [data-nav-item="analytics"] { color: #89b4fa; }
-[data-theme="catppuccin"] [data-nav-item="about"] { color: #f9e2af; }
-[data-theme="catppuccin"] [data-nav-item="settings"] { color: #a6e3a1; }
-[data-theme="catppuccin"] [data-nav-item]:hover { filter: brightness(1.25); }
-
 ::selection {
   background-color: var(--main-color);
-  color: var(--sub-alt-color);
+  color: var(--bg-color);
 }
 
 kbd {
-  color: var(--bg-color);
-  background-color: var(--sub-color);
-  padding: 0.2em 0.4em;
-  border-radius: 0.25em;
+  color: var(--text-color);
+  border: 1px solid var(--sub-color);
+  padding: 0.1em 0.35em;
   font-size: 0.75em;
   font-family: var(--font);
 }
@@ -120,8 +111,7 @@ button {
 
 :focus-visible {
   outline: none;
-  box-shadow: 0 0 0 0.1rem var(--bg-color), 0 0 0 0.2rem var(--text-color);
-  border-radius: calc(var(--roundness) / 2);
+  box-shadow: 0 0 0 2px var(--bg-color), 0 0 0 4px var(--main-color);
 }
 
 /* The page chrome hides while you type (Monkeytype "focus" mode).
@@ -265,6 +255,12 @@ button {
   width: 0.5em;
   border-radius: 0.05em;
   z-index: -1;
+  /* A blinking block would flash the inverted letter on and off. */
+  animation: none;
+}
+.letter.under-caret {
+  color: var(--bg-color) !important;
+  transition: color var(--caret-speed) var(--caret-ease);
 }
 .caret.outline {
   width: 0.5em;

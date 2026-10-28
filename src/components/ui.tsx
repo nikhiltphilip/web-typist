@@ -14,7 +14,7 @@ export function Icon({ icon: Glyph, className }: { icon: LucideIcon; className?:
 // Monkeytype's Button (components/common/Button.tsx): "text" variant is sub
 // coloured and turns text-coloured on hover; "button" has a sub-alt fill.
 const base =
-  "inline-flex h-min cursor-pointer select-none appearance-none items-center justify-center gap-[0.5em] rounded border-0 p-[0.5em] text-center leading-[1.25] transition-[color,background,opacity] duration-125 ease-in-out";
+  "inline-flex h-min cursor-pointer select-none appearance-none items-center justify-center gap-[0.5em] rounded-(--roundness) border-0 p-[0.5em] text-center leading-[1.25] transition-[color,background,opacity] duration-125 ease-in-out";
 
 export function buttonClass(variant: "text" | "button", active = false, disabled = false) {
   return cn(
@@ -86,4 +86,20 @@ export function LinkButton({
 
 export function Kbd({ children }: { children: ReactNode }) {
   return <kbd>{children}</kbd>;
+}
+
+/** An on/off switch. */
+export function Switch({ on, onChange, label }: { on: boolean; onChange: (on: boolean) => void; label?: string }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      aria-label={label}
+      onClick={() => onChange(!on)}
+      className={cn("relative h-5 w-9 shrink-0 cursor-pointer transition-colors duration-150", on ? "bg-main" : "bg-sub-alt")}
+    >
+      <span className={cn("absolute top-1 left-1 h-3 w-3 transition-transform duration-150", on ? "translate-x-4 bg-bg" : "bg-sub")} />
+    </button>
+  );
 }
